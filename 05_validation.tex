@@ -1,8 +1,8 @@
 \section{Evaluation procedure}\label{EVALUATION}
-To evaluate the data structures described in Section \ref{REQUIREMENTS:concretization}, multiple data structures must be built \ref{EVALUATION:data_structures} tested against a set of scenes which cover multiple worst case scenarios \ref{EVALUATION:scenes} and compared using a set of metrics \ref{EVALUATION:metrics}.
+To evaluate the data structures described in Section \ref{requirements:concretization}, multiple data structures must be built \ref{EVALUATION:data_structures} tested against a set of scenes which cover multiple worst case scenarios \ref{EVALUATION:scenes} and compared using a set of metrics \ref{EVALUATION:metrics}.
 
 \subsection{Data structures}\label{EVALUATION:data_structures}
-The in Section \ref{REQUIREMENTS:concretization} suggested data structures will be implemented. These structures will be compared against a flat 3D array, as this is the simplest volumetric data structure, while still being actively used in many areas. Along with that, we will compare against the ray tracing performance of NanoVDB \cite{NanoVDBBenchmark}. So we end up with the following data structures:
+The in Section \ref{requirements:concretization} suggested data structures will be implemented. These structures will be compared against a flat 3D array, as this is the simplest volumetric data structure, while still being actively used in many areas. Along with that, we will compare against the ray tracing performance of NanoVDB \cite{NanoVDBBenchmark}. So we end up with the following data structures:
 \begin{enumerate}
     \item Dynamic animation VDB
     \item Dynamic simulation VDB
@@ -29,7 +29,7 @@ There will be a multitude of different scenes with which different metrics will 
 \noindent\textbf{Simulation scenes:}
 \begin{enumerate}[noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt]
     \item Falling sand simulation. This scene has a simple implementation with only a small area in the volume being changed every frame. The rest of the scene will be empty which allows us to benchmark the sparsity if our data structure. Along with that, this will almost be a hello world type of scene as the behavior is very predictable.
-    \item A million particles expanding in random directions through the scene, which will be a worst case with as many topology changes in the tree as possible. Once these particles have moved outside of the AABB of the volume we should also see the data structure reduce to a very small size as it will not contain any data, and thus be completely sparse. 
+    \item A million particles expanding in random directions through the scene, which will be a worst case with as many topology changes in the tree as possible. Once these particles have moved outside of the AABB of the volume we should also see the data structure reduce to a very small size as it will not contain any data, and thus be completely sparse.
     \item Solid heterogeneous volume with changing densities. This will stress the simulation performance without changing the topology. Additionally, the entire tree needs to be allocated which will highlight the worst case memory usage.
 \end{enumerate}
 
