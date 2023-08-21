@@ -1,0 +1,306 @@
+@article{museth2013vdb,
+  title={VDB: High-resolution sparse volumes with dynamic topology},
+  author={Museth, Ken},
+  journal={ACM transactions on graphics (TOG)},
+  volume={32},
+  number={3},
+  pages={1--22},
+  year={2013},
+  publisher={ACM New York, NY, USA}
+}
+@incollection{museth2021nanovdb,
+  title={NanoVDB: A GPU-friendly and portable VDB data structure for real-time rendering and simulation},
+  author={Museth, Ken},
+  publisher={Association for Computing Machinery},
+  booktitle={ACM SIGGRAPH 2021 Talks},
+  pages={1--2},
+  year={2021}
+}
+@inproceedings{kajiya1986rendering,
+  title={The rendering equation},
+  author={Kajiya, James T},
+  booktitle={Proceedings of the 13th annual conference on Computer graphics and interactive techniques},
+  pages={143--150},
+  year={1986}
+}
+@misc{NVIDIARTX,
+  title = {Graphics Reinvented: Ray Tracing, AI, and Advanced Shading Deliver A Whole New Way To Experience Games},
+  author={Andrew Burnes},
+  howpublished = {\url{https://www.nvidia.com/en-us/geforce/news/graphics-reinvented-new-technologies-in-rtx-graphics-cards/}},
+  note = {Accessed: 2023-02-07},
+  year={2018}
+}
+@article{Restir2020,
+author = {Bitterli, Benedikt and Wyman, Chris and Pharr, Matt and Shirley, Peter and Lefohn, Aaron and Jarosz, Wojciech},
+title = {Spatiotemporal Reservoir Resampling for Real-Time Ray Tracing with Dynamic Direct Lighting},
+year = {2020},
+issue_date = {August 2020},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {39},
+number = {4},
+issn = {0730-0301},
+url = {https://doi.org/10.1145/3386569.3392481},
+doi = {10.1145/3386569.3392481},
+abstract = {Efficiently rendering direct lighting from millions of dynamic light sources using Monte Carlo integration remains a challenging problem, even for off-line rendering systems. We introduce a new algorithm---ReSTIR---that renders such lighting interactively, at high quality, and without needing to maintain complex data structures. We repeatedly resample a set of candidate light samples and apply further spatial and temporal resampling to leverage information from relevant nearby samples. We derive an unbiased Monte Carlo estimator for this approach, and show that it achieves equal-error 6\texttimes{}-60\texttimes{} faster than state-of-the-art methods. A biased estimator reduces noise further and is 35\texttimes{}-65\texttimes{} faster, at the cost of some energy loss. We implemented our approach on the GPU, rendering complex scenes containing up to 3.4 million dynamic, emissive triangles in under 50 ms per frame while tracing at most 8 rays per pixel.},
+journal = {ACM Trans. Graph.},
+month = {aug},
+articleno = {148},
+numpages = {17},
+keywords = {reservoir sampling, resampled importance sampling, real-time rendering, photorealistic rendering}
+}
+
+@incollection{schied2017SVGF,
+  title={Spatiotemporal variance-guided filtering: real-time reconstruction for path-traced global illumination},
+  author={Schied, Christoph and Kaplanyan, Anton and Wyman, Chris and Patney, Anjul and Chaitanya, Chakravarty R Alla and Burgess, John and Liu, Shiqiu and Dachsbacher, Carsten and Lefohn, Aaron and Salvi, Marco},
+  booktitle={Proceedings of High Performance Graphics},
+  pages={1--12},
+  publisher={Association for Computing Machinery},
+  year={2017}
+}
+@inproceedings{laine2010efficient,
+  title={Efficient sparse voxel octrees},
+  author={Laine, Samuli and Karras, Tero},
+  booktitle={Proceedings of the 2010 ACM SIGGRAPH symposium on Interactive 3D Graphics and Games},
+  pages={55--63},
+  year={2010}
+}
+
+@mastersthesis{van2015real,
+  title={Real-time ray tracing and editing of large voxel scenes},
+  author={van Wingerden, TL},
+  school={Utrecht University},
+  year={2015}
+}
+
+@misc{RenderGraph101,
+  title = {Render Graph 101},
+  author={Manon Oomen},
+  howpublished = {\url{https://blog.traverseresearch.nl/render-graph-101-f42646255636}},
+  note = {Accessed: 2023-02-10},
+  year={2022}
+}
+@misc{BindlessRenderingSetup,
+  title = {Bindless rendering — Setup},
+  author={Darius Bouma},
+  howpublished = {\url{https://medium.com/traverse-research/bindless-rendering-setup-afeb678d77fc}},
+  note = {Accessed: 2023-02-10},
+  year={2022}
+}
+@misc{VDBADeepDive,
+  title = {VDB: A Deep Dive},
+  author={Said Al Attrach},
+  howpublished = {\url{https://jangafx.com/2022/09/29/vdb-a-deep-dive/}},
+  note = {Accessed: 2023-02-13},
+  year={2022}
+}
+
+@inproceedings{laine2013megakernels,
+  title={Megakernels considered harmful: Wavefront path tracing on GPUs},
+  author={Laine, Samuli and Karras, Tero and Aila, Timo},
+  booktitle={Proceedings of the 5th High-Performance Graphics Conference},
+  pages={137--143},
+  year={2013}
+}
+
+@misc{VulkanAccelerationStructures,
+  title = {Ray Tracing In Vulkan},
+  author={Koch, Daniel and Hector, Tobias and Barczak, Joshua and Werness, Eric},
+  howpublished = {\url{https://www.khronos.org/blog/ray-tracing-in-vulkan#Acceleration_Structures}},
+  note = {Accessed: 2023-02-14},
+  year={2020}
+}
+@incollection{fong2017production,
+  title={Production volume rendering: Siggraph 2017 course},
+  author={Fong, Julian and Wrenninge, Magnus and Kulla, Christopher and Habel, Ralf},
+  booktitle={ACM SIGGRAPH 2017 Courses},
+  publisher={ACM New York, NY, USA},
+  pages={1--79},
+  year={2017}
+}
+@misc{JohnLinPerfectEngine,
+  title = {The Perfect Voxel Engine},
+  author={John Lin},
+  howpublished = {\url{https://voxely.net/blog/the-perfect-voxel-engine/}},
+  note = {Accessed: 2023-02-14},
+  year={2021}
+}
+
+@article{kampe2013high,
+  title={High resolution sparse voxel dags},
+  author={K{\"a}mpe, Viktor and Sintorn, Erik and Assarsson, Ulf},
+  journal={ACM Transactions on Graphics (TOG)},
+  volume={32},
+  number={4},
+  pages={1--13},
+  year={2013},
+  publisher={ACM New York, NY, USA}
+}
+@article{van2020lossy,
+  title={Lossy geometry compression for high resolution voxel scenes},
+  author={van der Laan, Remi and Scandolo, Leonardo and Eisemann, Elmar},
+  journal={Proceedings of the ACM on Computer Graphics and Interactive Techniques},
+  volume={3},
+  number={1},
+  pages={1--13},
+  year={2020},
+  publisher={ACM New York, NY, USA}
+}
+
+@inproceedings{careil2020interactively,
+  title={Interactively modifying compressed sparse voxel representations},
+  author={Careil, Victor and Billeter, Markus and Eisemann, Elmar},
+  booktitle={Computer Graphics Forum},
+  volume={39},
+  pages={111--119},
+  year={2020},
+  organization={Wiley Online Library}
+}
+
+@article{kim2022neuralvdb,
+  title={NeuralVDB: High-resolution Sparse Volume Representation using Hierarchical Neural Networks},
+  author={Kim, Doyub and Lee, Minjae and Museth, Ken},
+  journal={arXiv preprint arXiv:2208.04448},
+  year={2022}
+}
+
+@incollection{hoetzlein2016gvdb,
+  title={GVDB: Raytracing sparse voxel database structures on the GPU},
+  author={Hoetzlein, Rama Karl},
+  publisher={Association for Computing Machinery},
+  booktitle={Proceedings of High Performance Graphics},
+  pages={109--117},
+  year={2016}
+}
+@article{niessner2013real,
+  title={Real-time 3D reconstruction at scale using voxel hashing},
+  author={Nie{\ss}ner, Matthias and Zollh{\"o}fer, Michael and Izadi, Shahram and Stamminger, Marc},
+  journal={ACM Transactions on Graphics (ToG)},
+  volume={32},
+  number={6},
+  pages={1--11},
+  year={2013},
+  publisher={ACM New York, NY, USA}
+}
+
+@article{soderlund2022ray,
+  title={Ray Tracing of Signed Distance Function Grids},
+  author={S{\"o}derlund, Herman Hansson and Evans, Alex and Akenine-M{\"o}ller, Tomas},
+  journal={Journal of Computer Graphics Techniques Vol},
+  volume={11},
+  number={3},
+  year={2022}
+}
+@misc{Houdini,
+  title = {Houdini 19.5},
+  author={SideFX},
+  howpublished = {\url{https://www.sidefx.com/products/houdini/}},
+  note = {Accessed: 2023-02-17},
+  year={2022}
+}
+@article{lin2021fast,
+  title={Fast volume rendering with spatiotemporal reservoir resampling},
+  author={Lin, Daqi and Wyman, Chris and Yuksel, Cem},
+  journal={ACM Transactions on Graphics (TOG)},
+  volume={40},
+  number={6},
+  pages={1--18},
+  year={2021},
+  publisher={ACM New York, NY, USA}
+}
+
+@misc{PrefixSumOnVulkan,
+  title = {Prefix sum on Vulkan},
+  author={Raph Levien},
+  howpublished = {\url{https://raphlinus.github.io/gpu/2020/04/30/prefix-sum.html#forward-progress}},
+  note = {Accessed: 2023-02-24},
+  year={2020}
+}
+
+@inproceedings{amanatides1987fast,
+  title={A fast voxel traversal algorithm for ray tracing.},
+  author={Amanatides, John and Woo, Andrew and others},
+  booktitle={Eurographics},
+  volume={87},
+  pages={3--10},
+  year={1987}
+}
+
+@misc{ShaderToyQuadtree,
+  title = {quadtree traverser},
+  author={abje},
+  howpublished = {\url{https://www.shadertoy.com/view/Xs2czK}},
+  note = {Accessed: 2023-03-01},
+  year={2017}
+}
+
+@article{SDF_sphere_marching,
+author = {Bálint, Csaba and Kiglics, Mátyás},
+year = {2021},
+month = {01},
+pages = {},
+title = {Quadric tracing: A geometric method for accelerated sphere tracing of implicit surfaces},
+volume = {25},
+journal = {Acta Cybernetica},
+doi = {10.14232/actacyb.290007}
+}
+
+@misc{BVHJacco,
+  title = {How to build a BVH – Part 1: Basics},
+  author={Jacco Bikker},
+  howpublished = {\url{https://jacco.ompf2.com/2022/04/13/how-to-build-a-bvh-part-1-basics/}},
+  note = {Accessed: 2023-03-13},
+  year={2022}
+}
+
+@inproceedings{cao2010parallel,
+  title={Parallel banding algorithm to compute exact distance transform with the GPU},
+  author={Cao, Thanh-Tung and Tang, Ke and Mohamed, Anis and Tan, Tiow-Seng},
+  booktitle={Proceedings of the 2010 ACM SIGGRAPH symposium on Interactive 3D Graphics and Games},
+  pages={83--90},
+  year={2010}
+}
+@misc{NanoVDBBenchmark,
+  title = {Accelerating OpenVDB on GPUs with NanoVDB},
+  author={Braithwaite, Wil  and Museth, Ken},
+  howpublished = {\url{https://developer.nvidia.com/blog/accelerating-openvdb-on-gpus-with-nanovdb/}},
+  note = {Accessed: 2023-03-22},
+  year={2020}
+}
+@article{lin2022generalized,
+  title={Generalized resampled importance sampling: foundations of ReSTIR},
+  author={Lin, Daqi and Kettunen, Markus and Bitterli, Benedikt and Pantaleoni, Jacopo and Yuksel, Cem and Wyman, Chris},
+  journal={ACM Transactions on Graphics (TOG)},
+  volume={41},
+  number={4},
+  pages={1--23},
+  year={2022},
+  publisher={ACM New York, NY, USA}
+}
+@inproceedings{yang2020survey,
+  title={A survey of temporal antialiasing techniques},
+  author={Yang, Lei and Liu, Shiqiu and Salvi, Marco},
+  booktitle={Computer graphics forum},
+  volume={39},
+  pages={607--621},
+  year={2020},
+  organization={Wiley Online Library}
+}
+@misc{RenderingWithTwoTriangles,
+  title = {Rendering Worlds With Two Triangles},
+  author={Quilez, Inigo},
+  howpublished = {\url{https://iquilezles.org/articles/nvscene2008/}},
+  note = {Accessed: 2023-03-31},
+  year={2008}
+}
+
+@article{kutz2017spectral,
+  title={Spectral and decomposition tracking for rendering heterogeneous volumes},
+  author={Kutz, Peter and Habel, Ralf and Li, Yining Karl and Nov{\'a}k, Jan},
+  journal={ACM Transactions on Graphics (TOG)},
+  volume={36},
+  number={4},
+  pages={1--16},
+  year={2017},
+  publisher={ACM New York, NY, USA}
+}
