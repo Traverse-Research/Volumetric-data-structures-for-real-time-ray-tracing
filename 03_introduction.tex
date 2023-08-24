@@ -36,18 +36,14 @@ Generally, path tracing involves multiple steps to achieve real time performance
 
 
 
-
-
-\subsection{Traditional volume rendering} \label{introduction:traditional_volume_rendering}
-\subsubsection{Skybox} \label{introduction:traditional_volume_rendering:skybox}
-\subsubsection{Deformation} \label{introduction:traditional_volume_rendering:deformation}
-\subsubsection{Analytical ray marching} \label{introduction:traditional_volume_rendering:analytical_ray_marching}
-\subsubsection{Particles} \label{introduction:traditional_volume_rendering:particles}
-
-\subsection{Path traced volume rendering} \label{introduction:path_traced_volume_rendering}
+\clearpage\subsection{Path traced volume rendering} \label{introduction:path_traced_volume_rendering}
 In this project volume data represents clouds, explosions, fire and sand/dust storms. This means that we are not just interested in finding the boundary of a volume, but also in the contents of the volume. We may have varying densities or even different materials within one volume. For example, a flame which emits light surrounded by smoke, where the outer edge of this smoke is so sparse that it is almost completely transparent. When shading these kinds of materials there are three main things which can happen: (1) The ray is absorbed, meaning that no light transport will be rendered. When this happens, the light energy is converted into another energy form like heat. (2) The ray is traversed through or bounces off the particle. This will change the direction of the ray and potentially change the ray payload, for example when a blue particle is hit, the ray is modified to only return the blue color if a light is hit. (3) The ray hits an emissive particle. Meaning that light transport will be rendered, and the ray will not continue.
 
-Ray tracing these kinds of volumes is very different from normal ray tracing, as they require completely different methods. Normally there is a set of surfaces which define a scene. To render these scenes, BVH's are used to find an intersection between a ray and the scene as described in Section \ref{introduction:rendering:ray_tracing}. For volume rendering we don't have these concrete surfaces but instead have volumes with implicit particles, like dust or water droplets from a cloud. To render these volumes we somehow have to find where we hit such a particle and evaluate its shading function. We do not simulate these particles individually but describe volumes of the scene using densities, which are discretized into small volumetric pixels (voxels). When traversing such a volume we calculate how far we can traverse through these densities before we are likely to hit a particle. Then we take the step, evaluate the shading function and calculate how long our next step can be. This process is called ray marching \cite{RenderingWithTwoTriangles}. For homogeneous volumes (with a uniform density) these step sizes will always be the same, but for heterogeneous volumes they might not. In the heterogeneous case we calculate the longest possible step we could take through the most dense voxel in our scene and use that to make sure we do not overshoot and miss any dense voxels. This method quickly becomes prohibitively expansive when a single voxel has a high density. A solution would be to take steps proportional to the highest local density, for example the highest density of the $8^3$ nearest voxels. This way we can take step sizes which are proportional to the densities which we are more likely to traverse, instead of crippling the performance for every ray because of a single voxel \cite{kutz2017spectral}.
+\subsubsection{Data structure} \label{introduction:path_traced_volume_rendering:data_structure}
+Ray tracing these kinds of volumes is very different from normal ray tracing, as they require completely different methods. Normally there is a set of surfaces which define a scene. To render these scenes, BVH's are used to find an intersection between a ray and the scene as described in Section \ref{introduction:rendering:ray_tracing}. For volume rendering we don't have these concrete surfaces but instead have volumes with implicit particles, like dust or water droplets from a cloud. To render these volumes we somehow have to find where we hit such a particle and evaluate its shading function. We do not simulate these particles individually but describe volumes of the scene using densities, which are discretized into small volumetric pixels (voxels).
+
+\subsubsection{Delta tracking} \label{introduction:path_traced_volume_rendering:delta_tracking}
+When traversing such a volume we calculate how far we can traverse through these densities before we are likely to hit a particle. Then we take the step, evaluate the shading function and calculate how long our next step can be. This process is called ray marching \cite{RenderingWithTwoTriangles}. For homogeneous volumes (with a uniform density) these step sizes will always be the same, but for heterogeneous volumes they might not. In the heterogeneous case we calculate the longest possible step we could take through the most dense voxel in our scene and use that to make sure we do not overshoot and miss any dense voxels. This method is called delta tracking \cite{kutz2017spectral} and quickly becomes prohibitively expansive when a single voxel has a high density. A solution would be to take steps proportional to the highest local density, for example the highest density of the $8^3$ nearest voxels. This way we can take step sizes which are proportional to the densities which we are more likely to traverse, instead of crippling the performance for every ray because of a single voxel.
 
 \begin{figure}[H]
     \centering
@@ -55,19 +51,9 @@ Ray tracing these kinds of volumes is very different from normal ray tracing, as
     \caption{A ray traversing through a heterogeneous volume, where dots represent the location of shading evaluations. As can be seen, the more dense the volume (darker) the shorter the steps are.}
     \label{fig:sample_step_size}
 \end{figure}
-\subsubsection{Physics} \label{introduction:path_traced_volume_rendering:physics}
-\subsubsection{Noise functions} \label{introduction:path_traced_volume_rendering:noise_functions}
-\subsubsection{Delta tracking} \label{introduction:path_traced_volume_rendering:delta_tracking}
 
 
-
-
-
-
-
-
-\subsection{Voxel data structures} \label{introduction:voxel_data_structures}
-Data structures for volume data have seen multiple forms trying to optimize ray marching performance, memory footprint, update speed and simplicity. This research specifically targets heterogeneous volumes which often consist of gradients where outer voxels can have small non-zero values, instead of having opaque volume boundaries. We will briefly go over some of the major volume data structures, below.
+\clearpage
 
 \begin{wrapfigure}{r}{0.4\textwidth}
     \centering
@@ -76,37 +62,43 @@ Data structures for volume data have seen multiple forms trying to optimize ray 
     \label{fig:dda_traversal}
 \end{wrapfigure}
 
+\subsection{Voxel data structures} \label{introduction:voxel_data_structures}
+Data structures for volume data have seen multiple forms trying to optimize ray marching performance, memory footprint, update speed and simplicity. This research specifically targets heterogeneous volumes which often consist of gradients where outer voxels can have small non-zero values, instead of having opaque volume boundaries. We will briefly go over some of the major volume data structures, below.
+
+\begin{wrapfigure}{r}{0.4\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{figures/esvo_traversal.png}
+    \caption{Hierarchical DDA traversal through a sparse voxel octree. The yellow line is our ray. The brighter green a cell is, the deeper our nodes in the octree are. We can see that nodes which are further away from the circle, can be stepped through with big steps, but as we approach the circle, our steps become smaller. Image obtained from Shadertoy.}
+    \label{fig:esvo}
+\end{wrapfigure}
+
 \subsubsection{Dense 3D grid} \label{introduction:voxel_data_structures:dense_grid}
 The most basic structure (see Figure \ref{fig:dda_traversal}). Here, every value in the 3D array corresponds to a voxel. Indexing into this structure is fast and editing is trivial. However, there is no compression or empty space skipping. Another problem with flat arrays is their memory requirement as it has cubic scaling with the resolution. However, small scale simulation software still often relies on this data structure as it is easy to implement, and in many cases simulations have to update each voxel anyway.
+
 
 
 \subsubsection{Efficient sparse voxel octrees (ESVO)} \label{introduction:voxel_data_structures:esvo}
 A solution to the memory problems was proposed by NVIDIA, by introducing sparsity to homogeneous volume data \cite{laine2010efficient}. The main contribution is a data structure which drastically reduces the memory footprint by not storing information about homogeneous areas. This memory reduction also yields a speedup when traversing the volume, as larger steps can be taken through homogeneous areas (see Figure \ref{fig:esvo}). Along with that, the structure will more easily fit in the different caches of the GPU. However, due to the nature of tree structures, the data access pattern is less coherent which negatively impacts ray marching performance. The paper also did not take any form of animation into account. So this data structure only really works on static scenes \cite{JohnLinPerfectEngine}.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.9\linewidth]{figures/esvo_traversal.png}
-    \caption{Hierarchical DDA traversal through a sparse voxel octree. The yellow line is our ray. The brighter green a cell is, the deeper our nodes in the octree are. We can see that nodes which are further away from the circle, can be stepped through with big steps, but as we approach the circle, our steps become smaller. Image obtained from Shadertoy.}
-    \label{fig:esvo}
-\end{figure}
+
 \subsubsection{Sparse voxel directed acyclic graphs} \label{introduction:voxel_data_structures:svdag}
 A follow-up paper was released further improving the memory footprint optimization \cite{kampe2013high}. Here, the nodes of the octree can be reused for identical volumes, so one leaf can be the child of multiple nodes that share the same data (see Figure \ref{fig:DAG_node_deduplication}). The result is a significant reduction in memory usage over ESVO. Afterward, additional papers were written to, (1) further optimize the memory footprint by creating a lossy data structure which will slightly alter the volume data in an attempt to find more similar volumes \cite{van2020lossy} (LSVDAG). And (2) allow for real time editing of this data structure \cite{careil2020interactively} (HashDAG).
 
-\begin{figure}[H]
+\begin{wrapfigure}{r}{0.4\textwidth}
     \centering
-    \includegraphics[width=0.9\linewidth]{figures/DAG_node_deduplication.png}
+    \includegraphics[width=\linewidth]{figures/DAG_node_deduplication.png}
     \caption{Removal of identical nodes in all levels of a binary tree. In the SVDAG paper the same technique is applied to octrees. \cite{kampe2013high}}
     \label{fig:DAG_node_deduplication}
-\end{figure}
+\end{wrapfigure}
 \subsubsection{Brickmap} \label{introduction:voxel_data_structures:brickmap}
 Later another paper was released which tried to maintain part of the memory benefits from octrees while also improving ray marching performance \cite{van2015real}. This was done by keeping the idea of a hierarchical structure, but limiting the tree depth to 2 layers (a top level grid, the brickmap and the bottom level bricks, as can be seen in Figure \ref{fig:brickmap}), which improves cache utilization. An additional benefit of reducing the depth of a data structure is the update time. When running a fluid simulation, which has to touch every leaf node in a tree, a shallower tree will take fewer steps when going down to bottom of the tree to modify each voxel. Similar to the flat 3D array, the brickmap structure is quite fast when it comes to update speeds, as both have very shallow tree structures. Another paper explores implicit brickmaps \cite{niessner2013real}. These are implicit because they dont encode their location in a grid, but hash a world position and use that hash to index into the brick buffer directly. This allows for an unbounded index space instead of having to create a grid inside a certain axis aligned bounding box (AABB). However, nothing has been documented about them in the context of ray tracing.
 
-\begin{figure}[H]
+\begin{wrapfigure}{r}{0.4\textwidth}
     \centering
-    \includegraphics[width=0.9\linewidth]{figures/brickmap.png}
+    \includegraphics[width=\linewidth]{figures/brickmap.png}
     \caption{Here we see the brickmap (in red), which is dense. And whenever an area in this brickmap is not homogeneous (indicated by the filled in squares), we point to a brick (in blue). \cite{van2015real}}
     \label{fig:brickmap}
-\end{figure}
+\end{wrapfigure}
 \subsubsection{VDB} \label{introduction:voxel_data_structures:vdb}
 In the movie industry, \textbf{VDB} \cite{museth2013vdb} has been the standard for volumetric rendering for a long time. This is a hierarchical B+tree structure with 3 layers (see Figure \ref{fig:VDB}), which optimizes for both query speed and memory size. It does so by making clever use of bitmasks, logical bitwise operations and inverted tree traversal. The last of these optimizations means that we don't have to traverse down the tree every time we query a point. But instead we assume that consecutive points will be close to each other, and remember where we are in the tree. Then the next time we query a point we start at the bottom of the tree and have $O(1)$ access time if we retrieve a point which resides in the same bottom layer.
 
@@ -116,55 +108,87 @@ Research has also been conducted on encoding voxels or even internal layers of t
 
 One very useful result of the standardization of VDB technology is the data format. Many tools can interface directly with the VDB file format \cite{VDBADeepDive}, and many artistic tools can export to the VDB file format. These features make it easy to download specific effects and test in a specific renderer.
 
-\begin{figure}[H]
+\begin{wrapfigure}{r}{0.4\textwidth}
     \centering
-    \includegraphics[width=0.9\linewidth]{figures/OpenVDB.png}
+    \includegraphics[width=\linewidth]{figures/OpenVDB.png}
     \caption{The four level tree structure of the VDB data structure. In purple we see the top node which has arbitrary size and points to the first level of internal nodes. The two levels of internal nodes (in green and orange) both contain three rows of values. The top row is a bitmask indicating which values are "active" (this is application specific), the middle row is a bitmask indicating that a child node exists, and the bottom row containing a pointer to the child node. Then in blue we have a top row which is a bitmask indicating if a voxel is empty, and the bottom row containing the actual voxel data. \cite{museth2013vdb}}
     \label{fig:VDB}
-\end{figure}
+\end{wrapfigure}
 
 
 
 
-\subsection{Attribute separation} \label{introduction:attribute_separation}
+\clearpage\subsection{Attribute separation} \label{introduction:attribute_separation}
+All modern processors are built with cache hierarchies. These caches are usually a few megabytes and consist of many 128 byte cachelines. Which contain all recent memory accesses so they can be reused quickly when the memory is fetched again. When accessing any memory, an entire cacheline (of 128 bytes) is loaded. This means the memory access cost of fetching a single floating point value ($4$ bytes) is the same as fetching 32 ($128/4$) floating point values. Abusing this is key to writing fast CPU and GPU code. Therefore it is crucial to have as little unused data within each cacheline fetch as possible. Which can be achieved by separating the voxel data from the geometry structure \cite{dado2016geometry}.
+\subsubsection{Fast volume traversal} \label{introduction:attribute_separation:fast_volume_traversal}
+There are two main branches of volume traversal. The first is by sampling the volume along a ray with certain step sizes. This is what delta tracking does (see Section \ref{introduction:path_traced_volume_rendering:delta_tracking}). Another method of traversing the volume is a more exact technique called digital diffirential analyzer (DDA) \cite{amanatides1987fast}. This analytically calculates how far along the ray we can step to arrive at the next voxel. Using this technique we also know exactly how much density we accumulated along our steps. This has benefits for the shading part of our render, but we wont go into that in this research. DDA has been extended to allow hierarchical volume data structures to be traversed, this is called a hierarchical digital differential analyzer (HDDA)\cite{laine2010efficient}.
+
+
+Recently, NVIDIA has done research about using signed distance fields (SDF) to speed up traversal\cite{soderlund2022ray}. The general idea behind these distance fields is that the maximum step length a ray could take in any direction (without hitting anything) is pre-calculated, and used to skip over voxels that are known to be empty (see Figure \ref{fig:SDF_marching}). This method could be applied to most of the data structures described above, and might specifically be promising when combined with flat structures which dont implicitly store distance values by using bigger nodes in homogeneous volumes. However, calculating these SDF's is one additional step in the pipeline. Although this can be done quickly even for large volumes (less than $1$ ms for $1024^3$ voxels \cite{cao2010parallel}), it is unclear if the speedup during tracing outweighs the construction cost.
 \subsubsection{Bitmasks} \label{introduction:attribute_separation:bitmasks}
-\subsubsection{Regional data} \label{introduction:attribute_separation:regional_data}
-\subsubsection{3D Digital differential analyzer} \label{introduction:attribute_separation:dda}
-Recently, NVIDIA has done research about using SDFs to speed up traversal\cite{soderlund2022ray}. The general idea behind these distance fields is that the maximum step length a ray could take in any direction (without hitting anything) is pre-calculated, and used to skip over voxels that are known to be empty (see Figure \ref{fig:SDF_marching}). This method could be applied to most of the techniques described above, and might specifically be promising when combined with flat structures which dont implicitly store distance values by using bigger nodes in homogeneous volumes. However, calculating these SDF's is one additional step in the pipeline. Although this can be done quickly even for large volumes (less than $1$ ms for $1024^3$ voxels \cite{cao2010parallel}), it is unclear if the speedup during tracing outweighs the construction cost. Some other results from NVIDIA's paper are related to the new ray tracing graphics cards. These cards have hardware dedicated specifically to AABB and triangle intersections, and thus traversal algorithms which use these calculations can be sped up. In the paper, they did test storing bricks into a BVH, then traversing the BVH and using DDA to traverse through the bricks. Another, more interesting result they found was that storing every single voxel in a BVH actually had the fastest traversal speed. This last method makes very efficient use of the fixed function BVH traversal of the ray tracing cards, at the cost of a very large BVH.
+When taking steps along a ray, there is a very high chance that we will often access voxels which are close to eachother, especially when using DDA and we have to traverse all consecutive voxels. To reduce the bandwith requirement of these methods we can use bitmasks to indicate whether voxels are empty \cite{van2015real}\cite{museth2013vdb}. When using 32bit floating point values as densities for example, we can traverse all voxels which have a density of $0$ using the bitmask. Respectively, we can have a $16\times8\times8$ region of voxels in a single cacheline, making our traversal significantly less bandwith heavy.
 
-\begin{figure}[H]
+\begin{wrapfigure}{r}{0.4\textwidth}
     \centering
     \includegraphics[width=0.9\linewidth]{figures/sdf_ray_marching.png}
     \caption{Marching through a signed distance field enables steps which are exactly as long, as the closest heterogeneity is far away. Here we see the ray in green, and the step sizes are indicated by the red circles. \cite{SDF_sphere_marching}}
     \label{fig:SDF_marching}
-\end{figure}
-\subsubsection{Multi interface voxel data} \label{introduction:attribute_separation:multi_interface_voxel_data}
+\end{wrapfigure}
+
+
+
+\clearpage\subsection{Texture compression} \label{introduction:texture_compression}
+Raw image formats have pretty much always been too big for computers. Which is why compression is almost always applied. Usually photos are compressed using a lossy technique like Jpeg, and logos or other digital assets without too many gradients are compressed using png which is not lossy. These methods work fine when we care about compression ratio's, but they do not when we want to do billions of texture fetches per second on the GPU. For this purpose block compression is usually being used\cite{BlockCompression}. Block compression has different formats for different use cases. For example BC4 is suitable for greyscale textures, and BC5 is optimal for normals (as seen in Table \ref{tab:block_compression}). These formats all encode $4\times 4$ pixels into a certain number of bytes, which can be used for 2D textures but also technically work in three dimensions. However, we do get spatial dependencies in two out of three axes then, these are the dimensions in which the $4\times 4$ chunk is arranged.
+
+\begin{table}[htbp]
+    \centering
+    \adjustbox{max width=\textwidth}{
+        \begin{tabular}{|c|c|c|p{5cm}|}
+            \hline
+            \textbf{Type} & \textbf{Data Rate}         & \textbf{Palette Size} & \textbf{Use For}                     \\
+            \hline
+            BC1           & RGB + optional 1-bit alpha & 0.5 byte/px           & Color maps                           \\
+                          &                            &                       & Cutout color maps (1-bit alpha)      \\
+                          &                            &                       & Normal maps, if memory is tight      \\
+            \hline
+            BC2           & RGB + 4-bit alpha          & 1 byte/px             & n/a                                  \\
+            \hline
+            BC3           & RGBA                       & 1 byte/px             & Color maps with full alpha           \\
+                          &                            &                       & Packing color and mono maps together \\
+            \hline
+            BC4           & Grayscale                  & 0.5 byte/px           & Height maps                          \\
+                          &                            &                       & Gloss maps                           \\
+                          &                            &                       & Font atlases                         \\
+                          &                            &                       & Any grayscale image                  \\
+            \hline
+            BC5           & 2 $\times$ grayscale       & 1 byte/px             & Tangent-space normal maps            \\
+            \hline
+            BC6           & RGB, floating-point        & 1 byte/px             & HDR images                           \\
+                          &                            &                       &                                      \\
+            \hline
+            BC7           & RGB or RGBA                & 1 byte/px             & High-quality color maps              \\
+                          &                            &                       & Color maps with full alpha           \\
+            \hline
+        \end{tabular}
+    }
+    \caption{Block compression formats and use cases \cite{BlockCompression}.}
+    \label{tab:block_compression}
+\end{table}
 
 
 
 
-
-\subsection{Texture compression} \label{introduction:texture_compression}
-\subsubsection{Jpeg compression} \label{introduction:texture_compression:jpeg_compression}
-\subsubsection{Block compression} \label{introduction:texture_compression:block_compression}
-
-
-
-
-
-
-\subsection{Gaps in current research} \label{introduction:gaps_in_current_research}
-To conclude the introduction we will now list the most notable issues with the current state-of-the-art, and how we can push the state-of-the-art forward in a meaningful way. Many methods have either optimized volume data structures for memory usage (ESVO, SVDAG), ray tracing performance (Brickmaps, signed distance fields) or simulation times (flat 3D array). However none of these techniques currently can do all three of these things while keeping all data and computation on the GPU. For our purposes we require an extension to the VDB data structure to enable dynamic topology on the gpu. Furthermore, combining VDB with the compression scheme of SVDAG can be explored to allow for efficient animation playback. Additionally, the combination of signed distance fields can be incorporated into the VDB structure to allow for faster ray marching through these volumes.
+\clearpage\subsection{Gaps in current research} \label{introduction:gaps_in_current_research}
+There are of course still many issues with volume data structures, so below are some of the most notable issues with the current state-of-the-art, and how we can push the state-of-the-art forward in a meaningful way. Many methods have either optimized volume data structures for memory usage \cite{laine2010efficient}\cite{kampe2013high}, ray tracing performance \cite{van2015real} \cite{soderlund2022ray} \cite{museth2013vdb} or simulation times (flat 3D array). However none of these techniques currently can do all three of these things while keeping all data and computation on the GPU. Below are two issues which this research tries to address.
 \subsubsection{Large assets} \label{introduction:gaps_in_current_research:large_assets}
+Video game assets have been growing in size to the point where games can be hundreds of gigabytes. Adding another asset type, volumes, would further increase this significantly. So although there has been a lot of research done in compressing geometry to a point where it still has fast trace times, along with good compression rates\cite{van2015real}\cite{museth2013vdb}. We also need our actual density data to be very small, which has been done by \cite{dado2016geometry}, but this was been applied to normals and colors, not specifically densities.
 \subsubsection{Animation delta compression} \label{introduction:gaps_in_current_research:animation_delta_compression}
+Another thing which has not been explored extensively is applying delta compression on our volumes. This has been hinted at by \cite{careil2020interactively}, where they suggest encoding animation frames as different branches of the tree. Resulting in a structure which can simply swap some pointers at certain points in the tree when changing to the next frame. However, there are two issues with this method: (1) The deep quad-tree structure is not optimized for tracing, and when flattening the structure we rapidly reduce the effectiveness of de-duplicating our nodes. (2) This does not change the attributes of the lower level nodes, so when our attributes change (a density increases or decreases) we would have to swap pointers very high up in the tree, effectively requiring a new tree for every animation frame.
 
 
 
 
-
-
-
-\subsection{Traverse Research} \label{introduction:traverse_research}
+\clearpage\subsection{Traverse Research} \label{introduction:traverse_research}
 \href{https://traverseresearch.nl/}{Traverse Research} is a company which does state-of-the-art research in graphics, and more specifically ray tracing. Traverse does research for multiple hardware vendors including AMD and ARM, for whom they develop ray tracing algorithms, optimizations and workloads.
 \subsubsection{Breda} \label{introduction:traverse_research:breda}
 Traverse's current in-house hybrid rendering framework "Breda" includes many features which are expected from a modern renderer. However, volume rendering is still largely unexplored. Breda can compile for either a Vulkan or DirectX 12 backend to make use of the latest ray tracing features. Along with that, some advanced rendering techniques are used. Most notably bindless rendering\cite{BindlessRenderingSetup} and render graphs\cite{RenderGraph101}. The former is a different way of interfacing with data on the GPU, while the latter simplifies GPU synchronization while optimizing dispatch ordering based on read and write dependencies of different pieces of data on the GPU. All of this is written in Rust and HLSL.
