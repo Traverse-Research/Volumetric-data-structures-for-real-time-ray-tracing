@@ -17,7 +17,59 @@ The actual asset creation process has a few steps. First we read the metadata of
 
 
 \subsection{Shaders} \label{implementation:shaders}
-\subsection{Texture formats} \label{implementation:texture_formats}
+To integrate the built data structure into breda, two shaders have been written, \textit{VDB.hsls} and \textit{HDDA.hlsl}. The main way to interface with the data structure is contained in \textit{VDB.hlsl} which has functionality for getting voxels, getting the activity status of certain voxels, and checking what the deepest level of the tree a certain voxel is part of. \textit{HDDA.hlsl} is largely the same as implemented by \cite{museth2013vdb}. The main difference is that we make use of callbacks on the GPU, which is done by passing a template argument to the traversal function. This template argument must implement \textit{empty} and \textit{operator()} which are called after every step, or compiled away if either of them is not used. These step functions are used to write clean yet fast traversal code (as seen in Figure \ref{implementation:hdda_sample}).
+
+
+\begin{figure}
+    \begin{lstlisting}
+    // The hdda march method has the following function signature
+    // We explicitly say which level of our tree we want to traverse
+    template <typename VoxelData, typename VoxelFn>
+    void march(inout VoxelFn fn, Layer callbackLayer);
+
+    // We define a struct which contains our traversal payload
+    struct FirstDensityFn {
+        float4 color;
+    
+        bool operator()(float voxelData, float t0, float t1, uint dataIndex) {
+            float chunkIndex = voxelData * 360;
+            color = float4(hsvToRgb(chunkIndex, 1, 1), 1);
+            return false; // we dont want to continue traversal
+        }
+        bool empty(float t0, float t1, uint dataIndex) { 
+            return true; // we continue traversal
+        }
+    };
+
+    // Now we can simply perform our HDDA traversal as follows
+    float4 traverseVolume(){
+        Hdda hdda = Hdda::new_(volumeGrid, ray, inverseRay);
+        FirstDensityFn fn;
+        fn.color = float4(0,0,0,0);
+        hdda.march<float>(fn, LayerVoxels); 
+        return fn.color;
+    }
+\end{lstlisting}
+    \caption{Simplified outline of the HDDA api.}\label{implementation:hdda_sample}
+\end{figure}
+
+
+\subsection{Compression} \label{implementation:compression}
+As said Sections \ref{approach:texture_compression} and \ref{approach:clustering_similar_nodes} there are two types of compression of the voxel data going on. First we will have a look at how cluster similar bricks. This is largely done by using NDarray for different linear algebra methods. We parse our voxel data into a 2D matrix where every brick is one row. Then we calculate the variance of each brick, divide that by the bricks mean to get a normalized variance, and reject the brick if variance is higher than our set threshold. This way we only keep bricks which have low variance and thus have a low likelyhood of containing unique features. After which we run k-means on all low variance brickss, with a given k and number of iterations. Unfortunately this can be quite an expansive step as k-means has an algorithmic complexity of $O(nk)$ where n is the number of bricks in this case, and k the number of requested new bricks. So when both are large thiss step will become unpractical. However, most of the low variance bricks can be represented by a very small number of new bricks. After we have a new set of bricks we just have to fix the pointers of our L3 nodes and merge the filtered high variance bricks with the new bricks, and we are done.
+
+\begin{figure}[H]
+    \centering
+    %\subfloat[]{
+    %    \includegraphics[width=0.45\textwidth]{}
+    %}
+    %\hfill
+    %\subfloat[]{
+    %    \includegraphics[width=0.45\textwidth]{}
+    %}
+
+    \caption{} \label{implementation:compression}
+\end{figure}
+
 \subsection{Libraries} \label{implementation:libraries}
 
 
