@@ -67,44 +67,10 @@ To integrate the built data structure into breda, two shaders have been written,
 \subsection{Compression} \label{implementation:compression}
 As said in Sections \ref{approach:texture_compression} and \ref{approach:clustering_similar_nodes}, there are two types of compression of the voxel data going on. First we will have a look at how cluster similar bricks. This is largely done by using NDarray \cite{NDarray} for different linear algebra methods. We parse our voxel data into a 2D matrix where every brick is one row. Then we calculate the variance of each brick, divide that by the bricks mean to get a normalized variance, and reject the brick if variance is higher than our set threshold. This way we only keep bricks which have low variance and thus have a low likelyhood of containing unique features. After which we run k-means on all low variance bricks, with a given k and number of iterations. Unfortunately this can be quite an expansive step as k-means has an algorithmic complexity of $O(nk)$ where n is the number of bricks in this case, and k the number of requested new bricks. So when both are large this step will become unpractical. However, most of the low variance bricks can be represented by a very small number of new bricks. After we have a new set of bricks we just have to fix the pointers of our L3 nodes and merge the filtered high variance bricks with the new bricks, and we are done. In Figure \ref{fig:implementation:compression:cluster} we see the results of this compression technique.
 
-\begin{figure}[H]
-    \centering
-    \subfloat[]{
-        \includegraphics[width=0.45\textwidth]{figures/pre_clustered_memory.png} \label{fig:implementation:compression:pre_cluster}
-    }
-    \hfill
-    \subfloat[]{
-        \includegraphics[width=0.45\textwidth]{figures/post_clustered_memory.png} \label{fig:implementation:compression:post_cluster}
-    }
-    \hfill
-    \subfloat[]{
-        \begin{tabular}{ | c | c | c | c |}
-            \hline
-            \textbf{k} & \textbf{variance threshold} & \textbf{iterations} & \textbf{RMSE} \\
-            \hline
-            3          & 4                           & 3                   & 3             \\
-            \hline
-        \end{tabular}
-    }
-    \caption{The results of our clustering compression technique. All of these results use Bc7 encoding. Figure \ref{fig:implementation:compression:pre_cluster} shows a slice out of the voxel brick data texture on the GPU. There are visible long chains of black or otherwise greyscale slices which means that these bricks are mostly homogeneous inside that brick. In Figure \ref{fig:implementation:compression:post_cluster} we again see a slice of the voxel brick data texture, but this time after running our clustering algorithm. There are visibly fewer patches greyscale bricks when compared to figure \ref{fig:implementation:compression:pre_cluster}. This shows us that we are actually removing bricks which are homogeneous, and keeping unique nodes.} \label{fig:implementation:compression:cluster}
-\end{figure}
 
-
-\noindent
 Texture block compression is done after rearranging the data from a buffer layout to a texture layout. With this data layout we can reduce the floating pooint precision, or even use the existing intel texture compressor \cite{ISPCTextureCompressor} to encode our data into Bc7. After doing this we still have to tell our backend what the format is of our texture, and then we are done. We can reuse our hlsl code for all formats because hlsl automatically samples different floating point types correctly.  In Figure \ref{fig:implementation:compression:bc} we see the results of this compression technique.
 
-\begin{figure}[H]
-    \centering
-    %\subfloat[]{
-    %    \includegraphics[width=0.45\textwidth]{}
-    %}
-    %\hfill
-    %\subfloat[]{
-    %    \includegraphics[width=0.45\textwidth]{}
-    %}
 
-    \caption{} \label{fig:implementation:compression:bc}
-\end{figure}
 
 
 \subsection{VDB viewer} \label{implementation:vdb_viewer}
