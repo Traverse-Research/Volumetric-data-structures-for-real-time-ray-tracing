@@ -3,12 +3,7 @@
 
 
 
-
-
-
-
-
-\clearpage\subsection{Traverse Research} \label{introduction:traverse_research}
+\subsection{Traverse Research} \label{introduction:traverse_research}
 \href{https://traverseresearch.nl/}{Traverse Research} is a company which does state-of-the-art research in graphics, and more specifically ray tracing. Traverse does research for multiple hardware vendors including AMD and ARM, for whom they develop ray tracing algorithms, optimizations and workloads.
 \subsubsection{Breda} \label{introduction:traverse_research:breda}
 Traverse's current in-house hybrid rendering framework "Breda" includes many features which are expected from a modern renderer. However, volume rendering is still largely unexplored. Breda can compile for either a Vulkan or DirectX 12 backend to make use of the latest ray tracing features. Along with that, some advanced rendering techniques are used. Most notably bindless rendering\cite{BindlessRenderingSetup} and render graphs\cite{RenderGraph101}. The former is a different way of interfacing with data on the GPU, while the latter simplifies GPU synchronization while optimizing dispatch ordering based on read and write dependencies of different pieces of data on the GPU. All of this is written in Rust and HLSL.
