@@ -69,9 +69,12 @@ Data structures for volume data have seen multiple forms trying to optimize ray 
 \begin{wrapfigure}{r}{0.4\textwidth}
     \centering
     \includegraphics[width=\linewidth]{figures/esvo_traversal.png}
-    \caption{Hierarchical digital differential analyzer (HDDA) traversal through a sparse voxel octree. The yellow line is our ray. The brighter green a cell is, the deeper our nodes in the octree are. We can see that nodes which are further away from the circle, can be stepped through with big steps, but as we approach the circle, our steps become smaller. Image obtained from Shadertoy.}
+    \caption{Hierarchical digital differential analyzer (HDDA) traversal through a sparse voxel octree. The yellow line is our ray. The brighter green a cell is, the deeper our nodes in the octree are. We can see that nodes which are further away from the circle, can be stepped through with big steps, but as we approach the circle, our steps become smaller. \cite{ShaderToyQuadtree}}
     \label{fig:esvo}
 \end{wrapfigure}
+
+
+
 
 \subsubsection{Dense 3D grid} \label{related_work:voxel_data_structures:dense_grid}
 The most basic structure (see Figure \ref{fig:dda_traversal}). Here, every value in the 3D array corresponds to a voxel. Indexing into this structure is fast and editing is trivial. However, there is no compression or empty space skipping. Another problem with flat arrays is their memory requirement as it has cubic scaling with the resolution. However, small scale simulation software still often relies on this data structure as it is easy to implement, and in many cases simulations have to update each voxel anyway.
@@ -101,7 +104,7 @@ Later another paper was released which tried to maintain part of the memory bene
     \label{fig:brickmap}
 \end{wrapfigure}
 \subsubsection{VDB} \label{related_work:voxel_data_structures:vdb}
-In the movie industry, \textbf{VDB} \cite{museth2013vdb} has been the standard for volumetric rendering for a long time. This is a hierarchical B+tree structure with 3 layers (see Figure \ref{fig:VDB}), which optimizes for both query speed and memory size. It does so by making clever use of bit masks, logical bitwise operations and inverted tree traversal. The last of these optimizations means that we don't have to traverse down the tree every time we query a point. But instead we assume that consecutive points will be close to each other, and remember where we are in the tree. Then the next time we query a point we start at the bottom of the tree and have $O(1)$ access time if we retrieve a point which resides in the same bottom layer.
+In the movie industry, \textbf{VDB} \cite{museth2013vdb} has been the standard for volumetric rendering for a long time. This is a hierarchical B+tree structure with 3 layers (see Figure \ref{fig:VDB}), which optimizes for both query speed and memory size. It does so by making clever use of bit masks (see section \ref{related_work:attribute_separation:bitmasks}), logical bitwise operations and inverted tree traversal. The last of these optimizations means that we don't have to traverse down the tree every time we query a point. But instead we assume that consecutive points will be close to each other, and remember where we are in the tree. Then the next time we query a point we start at the bottom of the tree and have $O(1)$ access time if we retrieve a point which resides in the same bottom layer.
 
 The VDB structure has mostly been used on the CPU. There have been implementations which port VDB to the GPU, but these do not support dynamic topology \cite{hoetzlein2016gvdb} \cite{museth2021nanovdb}. They would allow individual voxels to be modified, but can't place new voxels in arbitrary locations. This limitation makes simulation on the GPU impractical while maintaining the sparsity which makes the structure effective. The reason why this dynamic topology has never been implemented likely has to do with an inherent race condition when trying to modify any tree structure in parallel.
 
@@ -127,7 +130,7 @@ There are two main branches of volume traversal. The first is by sampling the vo
 
 Recently, NVIDIA has done research about using signed distance fields (SDF) to speed up traversal\cite{soderlund2022ray}. The general idea behind these distance fields is that the maximum step length a ray could take in any direction (without hitting anything) is pre-calculated, and used to skip over voxels that are known to be empty (see Figure \ref{fig:SDF_marching}). This method could be applied to most of the data structures described above, and might specifically be promising when combined with flat structures which don't implicitly store distance values by using bigger nodes in homogeneous volumes. However, calculating these SDF's is one additional step in the pipeline. Although this can be done quickly even for large volumes (less than $1$ ms for $1024^3$ voxels \cite{cao2010parallel}), it is unclear if the speedup during tracing outweighs the construction cost.
 \subsubsection{Bit  masks} \label{related_work:attribute_separation:bitmasks}
-When taking steps along a ray, there is a high chance that we will often access voxels which are close to each other, especially when using DDA, and we have to traverse all consecutive voxels. To reduce the bandwidth requirement of these methods we can use bit masks to indicate whether voxels are empty \cite{van2015real}\cite{museth2013vdb}. When using 32bit floating point values as densities for example, we can traverse all voxels which have a density of $0$ using the bitmask. Respectively, we can have a $16\times8\times8$ region of voxels in a single cache line, making our traversal significantly less bandwidth heavy.
+When taking steps along a ray, there is a high chance that we will often access voxels which are close to each other, especially when using DDA, and we have to traverse all consecutive voxels. To reduce the bandwidth requirement of these methods we can use bit masks to indicate whether voxels are empty \cite{van2015real}\cite{museth2013vdb}. When using 32bit floating point values as densities for example, we can traverse all voxels which have a density of $0$ using the bit mask. Respectively, we can have a $16\times8\times8$ region of voxels in a single cache line, making our traversal significantly less bandwidth heavy.
 
 \begin{wrapfigure}{r}{0.4\textwidth}
     \centering
@@ -136,7 +139,28 @@ When taking steps along a ray, there is a high chance that we will often access 
     \label{fig:SDF_marching}
 \end{wrapfigure}
 
-
+\begin{table}[htbp]
+    \centering
+    \begin{adjustbox}{max width=\textwidth}
+    \begin{tabularx}{\textwidth}{|c|X|X|X|X|X|}
+    \hline
+    \textbf{Method} & \textbf{Sampling Performance} & \textbf{DDA Performance} & \textbf{Memory Footprint} & \textbf{Update Speed} & \textbf{Simplicity} \\
+    \hline
+    Dense Grid & \Plus \Plus & \Minus \Minus  & \Minus \Minus & \Plus \Plus & \Plus \Plus \\
+    \hline
+    ESVO & \Minus \Minus & \Plus & \Plus & \Minus \Minus & \Minus \\
+    \hline
+    SVDAG & \Minus \Minus & \Plus & \Plus \Plus & \Minus \Minus & \Minus \Minus \\
+    \hline
+    Brickmap & \Plus & \Plus \Plus & \Minus & \Plus & \Plus \\
+    \hline
+    VDB & \Plus & \Plus \Plus & \Plus & \Minus & \Minus \\
+    \hline
+    \end{tabularx}
+    \end{adjustbox}
+    \caption{An overview of the different data structures. The pluses and minus' provide some intuition into what every structure is optimized for. A very broad summary of the different metrics: The shallower the tree, the faster our sampling. Deeper trees have better DDA performance (see section \ref{related_work:attribute_separation:fast_volume_traversal} for a very brief description), but we get optimal performance when our nodes approximate the size of our caches and cache lines. Deeper trees improve memory footprint and deduplication improves it even further. The shallower our tree, the faster and easier our updates. And simplicity depends on the method.}
+    \label{tab:structure-comparison}
+\end{table}
 
 \subsection{Texture compression} \label{related_work:texture_compression}
 Although it might sound odd, we could learn a thing or two from texture compression techniques. They are similar to our voxel data in the sense that both contain floating point arrays. The only two differences are that textures usually store color data and are two-dimensional, while our volume data contains densities and is three-dimensional. These floating point arrays that textures use, have pretty much always been too big for computers, at least when no compression is applied. Usually photos are compressed using a lossy technique like JPEG, and logos or other digital assets without too many gradients are compressed using PNG which is not lossy. These methods work fine when we care about compression ratio's, but they do not when we want to do billions of texture fetches per second on the GPU. For this purpose block compression is usually being used\cite{BlockCompression}. Block compression has different formats for different use cases. For example BC4 is suitable for grayscale textures, and BC5 is optimal for normal's (as seen in Table \ref{tab:block_compression}). These formats all encode $4\times 4$ pixels into a certain number of bytes, which can be used for 2D textures but also technically work in three dimensions. However, we do get spatial dependencies in two out of three axes then, these are the dimensions in which the $4\times 4$ chunk is arranged.
