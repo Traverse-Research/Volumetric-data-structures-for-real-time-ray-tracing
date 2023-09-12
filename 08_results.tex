@@ -7,28 +7,28 @@ Multiple models were used to evaluate the implemented methods in section \ref{im
     \centering 
     \begin{tabularx}{\textwidth}{|X|c|c|c|c|}
     \hline
-    \textbf{Dataset} & \textbf{Voxels} & \textbf{Dimensions} & \textbf{Animation frames} & \textbf{Render}\\
+    \textbf{Model} & \textbf{Voxels} & \textbf{Dimensions} & \textbf{Animation frames} & \textbf{Render}\\
     \hline
-    \textbf{fire} & 4,458,790 & [160, 363, 152] & 1 & \includegraphics[width=4cm]{figures/disney _cloud.png}\\
+    \textbf{fire} & 4,458,790 & [160, 363, 152] & 1 & \includegraphics[width=4cm]{figures/fire.png}\\
     \hline
-    \textbf{bunny} & 5,513,993 & [627, 620, 488] & 1 & \includegraphics[width=1cm]{figures/disney _cloud.png}\\
+    \textbf{bunny} & 5,513,993 & [627, 620, 488] & 1 & \includegraphics[width=4cm]{figures/bunny.png}\\
     \hline
-    \textbf{bunny cloud} & 19,210,271 & [576, 571, 437] & 1 & \includegraphics[width=1cm]{figures/disney _cloud.png}\\
+    \textbf{bunny cloud} & 19,210,271 & [576, 571, 437] & 1 & \includegraphics[width=4cm]{figures/bunny cloud.png}\\
     \hline
-    \textbf{armadillo} & 22,734,512 & [1,275, 1,518, 1,159] & 1 & \includegraphics[width=1cm]{figures/disney _cloud.png}\\
+    \textbf{armadillo} & 22,734,512 & [1,275, 1,518, 1,159] & 1 & \includegraphics[width=4cm]{figures/armadilo.png}\\
     \hline
-    \textbf{dragon} & 23,347,893 & [2,022, 910, 1,346] & 1 & \includegraphics[width=1cm]{figures/disney _cloud.png}\\
+    \textbf{dragon} & 23,347,893 & [2,022, 910, 1,346] & 1 & \includegraphics[width=4cm]{figures/dragon.png}\\
     \hline
-    \textbf{cloud pack} & 49,869,596 & [349, 178, 530] & 10 & \includegraphics[width=1cm]{figures/disney _cloud.png}\\
+    \textbf{cloud pack} & 49,869,596 & [349, 178, 530] & 10 & \includegraphics[width=4cm]{figures/cloud pack.png}\\
     \hline
-    \textbf{disney cloud} & 188,358,293 & [993, 675, 1,224] & 1 & \includegraphics[width=1cm]{figures/disney _cloud.png}\\
+    \raggedright\textbf{disney cloud half res} & 188,358,293 & [993, 675, 1,224] & 1 & \includegraphics[width=4cm]{figures/disney cloud.png}\\
     \hline
-    \textbf{chimney} & 239,747,485 & [160, 350, 505] & 100 & \includegraphics[width=1cm]{figures/disney _cloud.png}\\
+    \textbf{chimney} & 239,747,485 & [160, 350, 505] & 100 & \includegraphics[width=4cm]{figures/chimney.png}\\
     \hline
-    \textbf{shockwave} & 631,494,157 & [732, 140, 729] & 50 & \includegraphics[width=1cm]{figures/disney _cloud.png}\\
+    \textbf{shockwave} & 631,494,157 & [732, 140, 729] & 50 & \includegraphics[width=4cm]{figures/shockwave.png}\\
     \hline
     \end{tabularx}
-    \caption{Data Summary}
+    \caption{The used volume models for our results. Bunny, armadillo and dragon consist of only the bounding edge of the volume. Cloud pack, chimney and shockwave contain multiple animation frames and thus can make use of delta compression. The voxels column indicates the number of non-zero voxels in the base model. All renders are done using the Breda framework using 1000 samples per pixel. }
     \label{tab:data-summary}
 \end{table}
 
