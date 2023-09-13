@@ -125,6 +125,7 @@ Block compression theoretically has a good compression ratio, by reducing our vo
     \caption{We compare the Root Mean Square Error (RMSE) of the compression of four different models at $1000$ samples per pixel. We calculate the difference against the full 32-bit floating point precision model as this is closest to the ground truth.} \label{fig:block_compression}
 \end{figure}
 \subsection{Clustering} \label{results:clustering}
+Clustering similar bricks has proven more difficult than simply running k-means on all bricks. The main issue is figuring out which bricks contain high frequency data, and which contain low frequency data. The former should not be clustered as there is a very low chance that there will be any bricks which are similar, and thus, reduce the quality.
 
 
 \begin{figure}[H]
