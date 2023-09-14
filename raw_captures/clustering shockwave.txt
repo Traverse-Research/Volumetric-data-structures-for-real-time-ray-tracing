@@ -1,0 +1,25 @@
+working on shockwave  
+
+working on shockwave_1000_5_01
+optimizing with k: 1000 and 5 iterations
+threshold: 0.09838413 variance: 0.0007596814 mean: 0.04097788 min: 0 max: 0.09978041
+to_keep: 1620453 to_cluster: 257330
+k: 1000 max_iter: 5 n_samples: 257330 n_features: 512
+
+working on shockwave_100_10_01
+optimizing with k: 100 and 10 iterations
+threshold: 0.09838413 variance: 0.0007596814 mean: 0.04097788 min: 0 max: 0.09978041
+to_keep: 1620453 to_cluster: 257330
+k: 100 max_iter: 10 n_samples: 257330 n_features: 512
+
+working on shockwave_100_5_1
+optimizing with k: 100 and 5 iterations
+threshold: 0.08342981 variance: 0.0007596814 mean: 0.04097788 min: 0 max: 0.09978041
+to_keep: 0 to_cluster: 1877783
+k: 100 max_iter: 5 n_samples: 1877783 n_features: 512
+
+working on shockwave_100_5_01
+optimizing with k: 100 and 5 iterations
+threshold: 0.09838413 variance: 0.0007596814 mean: 0.04097788 min: 0 max: 0.09978041
+to_keep: 1620453 to_cluster: 257330
+k: 100 max_iter: 5 n_samples: 257330 n_features: 512

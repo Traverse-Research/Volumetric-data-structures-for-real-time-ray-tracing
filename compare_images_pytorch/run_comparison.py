@@ -29,7 +29,18 @@ for comp, base in to_compare.items():
     
     diff_maker = nn.MSELoss(reduction='none')
     diff = torch.sqrt(diff_maker(comp_im, base_im))
-    torchvision.io.write_png(functional.convert_image_dtype(diff * 5, torch.uint8), "diff_" + comp)
+    print(torch.mean(diff))
+    print(torch.median(diff))
+    print(torch.min(diff))
+    print(torch.max(diff))
+    print(diff.shape)
+    to_write_im = torch.reshape(torch.mean(diff, 0), (1,1400, 2248))
+    to_write_im = to_write_im*10
+    print(to_write_im.shape)
+    to_write_im = to_write_im.repeat(3,1,1)
+    print(to_write_im.shape)
+    #to_write_im = torch.lerp(to_write_im, end, 1)
+    torchvision.io.write_png(functional.convert_image_dtype(to_write_im, torch.uint8), "diff_" + comp)
 
 
     criterion = nn.MSELoss()

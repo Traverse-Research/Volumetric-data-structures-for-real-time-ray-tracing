@@ -1,0 +1,89 @@
+working on animated_shockwave
+total voxels 631494157
+axis sizes [732, 140, 729]
+L1 nodes 50
+L2 nodes 1638400
+L3 nodes 9658368
+Bricks 1900544
+Total size 1.746GB
+animation frames 50
+                                                                                   
+working on armadillo
+total voxels 22734512
+axis sizes [1275, 1518, 1159]
+L1 nodes 1
+L2 nodes 32768
+L3 nodes 1339392
+Bricks 131072
+Total size 125MB
+animation frames 1
+
+working on bunny
+total voxels 5513993
+axis sizes [627, 620, 488]
+L1 nodes 1
+L2 nodes 32768
+L3 nodes 307200
+Bricks 65536
+Total size 46MB
+animation frames 1
+                                                                                       
+working on bunny-cloud
+total voxels 19210271
+axis sizes [576, 571, 437]
+L1 nodes 1
+L2 nodes 32768
+L3 nodes 303104
+Bricks 131072
+Total size 54MB
+animation frames 1
+
+working on chimney
+total voxels 239747485
+axis sizes [160, 350, 505]
+L1 nodes 100
+L2 nodes 3276800
+L3 nodes 9195520
+Bricks 917504
+Total size 2.434GB
+animation frames 100
+
+working on cloud-pack
+total voxels 49869596
+axis sizes [349, 178, 530]
+L1 nodes 10
+L2 nodes 327680
+L3 nodes 905216
+Bricks 196608
+Total size 255MB
+animation frames 10
+                                                                                         
+working on disney_cloud
+total voxels 188358293
+axis sizes [993, 675, 1224]
+L1 nodes 1
+L2 nodes 32768
+L3 nodes 1007616
+Bricks 327680
+Total size 127MB
+animation frames 1
+                                                                                      
+working on dragon
+total voxels 23347893
+axis sizes [2022, 910, 1346]
+L1 nodes 1
+L2 nodes 32768
+L3 nodes 1302528
+Bricks 131072
+Total size 122MB
+animation frames 1
+                                                                                      
+working on fire
+total voxels 4458790
+axis sizes [160, 363, 152]
+L1 nodes 1
+L2 nodes 32768
+L3 nodes 65536
+Bricks 65536
+Total size 28MB
+animation frames 1
