@@ -127,27 +127,28 @@ This compression method offers very good compression rates with barely any quali
     \caption{The Root Mean Square Error (RMSE) of the compression of four different models at $1000$ samples per pixel. Higher samples per pixel counts would reduce the inherent path tracing noise which would change the RMSE offset seen in the comparison with f16 (this format is practically identical to f32). We calculate the difference against the full 32-bit floating point precision model as this is closest to the ground truth.} \label{fig:block_compression}
 \end{figure}
 \subsection{Clustering} \label{results:clustering}
-Clustering similar bricks has proven more difficult than simply running k-means on all bricks. The main issue lies with figuring out which bricks contain high frequency data, and which contain low frequency data. The former should not be clustered as there is a very low chance that there will be any bricks which are similar, and thus, reduce the quality if we merge them. In figure \ref{fig:block_compression_visualized} we see what parameters contribute to a minimized loss of quality with the best compression ratio. A more technical view of our data can be seen in figure \ref{fig:implementation:compression:cluster}. Here we see that many similar clusters have been removed and our final voxel data texture contains fewer homogeneous grayscale bricks. 
+Clustering similar bricks has proven more difficult than simply running k-means on all bricks. The main issue lies with figuring out which bricks contain high frequency data, and which contain low frequency data. The former should not be clustered as there is a very low chance that there will be any bricks which are similar, and thus, reduce the quality if we merge them. In figure \ref{fig:block_compression_visualized} we see what parameters contribute to a minimized loss of quality with the best compression ratio. As also can be seen in the previously mentioned figure, when bricks with high variance are also being clustered we quickly get blocky volumes, this is not acceptable in Breda. Only in sub-figure \ref{fig:block_compression_visualized:01} we no longer see blocky regions. A more low level view of our data can be seen in figure \ref{fig:implementation:compression:cluster}. Here we see that many similar clusters have been removed and our final voxel data texture contains fewer homogeneous grayscale bricks. 
 
-One point of improvement to this technique could be a more optimized rejection scheme. Currently, we reject if the normalized variance of all brick values is too high. This only allows us to cluster homogeneous bricks, and not brick which contain a smooth gradient, even though there are bricks which are simply a gradient in one specific axis which could be clustered.
+
+One point of improvement to this technique could be a more optimized rejection scheme. Currently, we reject if the normalized variance of all brick values is too high. This only allows us to cluster homogeneous bricks, and not brick which contain a smooth gradient, even though there are bricks which are simply a gradient in one specific axis which likely could be clustered. Another major issue with this compression scheme is the build times. It currently takes multiple minutes to compress both the shockwave and the chimney animation, which makes development iteration times very slow.
 
 
 \begin{figure}[H]
     \centering
     \subfloat[Disney cloud without cluster compression.]{
-        \includegraphics[width=0.45\textwidth]{figures/disney_cloud_clustering_raw.png} \label{fig:block_compression_visualized}
+        \includegraphics[width=0.45\textwidth]{figures/disney_cloud_clustering_raw.png} \label{fig:block_compression_visualized:raw}
         }
     \hfill
     \subfloat[Disney cloud with all bricks being clustered.]{
-        \includegraphics[width=0.45\textwidth]{figures/disney_cloud_clustering_99.png} \label{fig:block_compression_visualized}
+        \includegraphics[width=0.45\textwidth]{figures/disney_cloud_clustering_99.png} \label{fig:block_compression_visualized:99}
         }
     \hfill
     \subfloat[Disney cloud with a variance reduction of $0.1$, clustering roughly $70\%$ of the bricks into 100 new bricks.]{
-        \includegraphics[width=0.45\textwidth]{figures/disney_cloud_clustering_1.png} \label{fig:block_compression_visualized}
+        \includegraphics[width=0.45\textwidth]{figures/disney_cloud_clustering_1.png} \label{fig:block_compression_visualized:1}
         }
     \hfill
     \subfloat[Disney cloud with a variance reduction of $0.01$, clustering roughly $35\%$ of the bricks into 100 new bricks.]{
-        \includegraphics[width=0.45\textwidth]{figures/disney_cloud_clustering_01.png} \label{fig:block_compression_visualized}
+        \includegraphics[width=0.45\textwidth]{figures/disney_cloud_clustering_01.png} \label{fig:block_compression_visualized:01}
         }
     \hfill
     \subfloat[]{

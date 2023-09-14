@@ -1,0 +1,32 @@
+working on chimney
+
+working on chimney_1000_5_1
+optimizing with k: 1000 and 5 iterations
+threshold: 0.045670163 variance: 0.0009773666 mean: 0.018709736 min: 0.000014804056 max: 0.53216136
+to_keep: 26820 to_cluster: 888881
+k: 1000 max_iter: 5 n_samples: 888881 n_features: 512
+
+working on chimney_100_10_1
+optimizing with k: 100 and 10 iterations
+threshold: 0.045670163 variance: 0.0009773666 mean: 0.018709736 min: 0.000014804056 max: 0.53216136
+to_keep: 26820 to_cluster: 888881
+k: 100 max_iter: 10 n_samples: 888881 n_features: 512
+
+working on chimney_100_5_01
+optimizing with k: 100 and 5 iterations
+threshold: 0.16023886 variance: 0.0009773666 mean: 0.018709736 min: 0.000014804056 max: 0.53216136
+to_keep: 401047 to_cluster: 514654
+k: 100 max_iter: 5 n_samples: 514654 n_features: 512
+
+working on chimney_100_5_1
+optimizing with k: 100 and 5 iterations
+threshold: 0.045670163 variance: 0.0009773666 mean: 0.018709736 min: 0.000014804056 max: 0.53216136
+to_keep: 26820 to_cluster: 888881
+k: 100 max_iter: 5 n_samples: 888881 n_features: 512
+
+working on chimney_100_5_99
+optimizing with k: 100 and 5 iterations
+threshold: 0.00041774855 variance: 0.0009773666 mean: 0.018709736 min: 0.000014804056 max: 0.53216136
+to_keep: 0 to_cluster: 915701
+k: 100 max_iter: 5 n_samples: 915701 n_features: 512
+
