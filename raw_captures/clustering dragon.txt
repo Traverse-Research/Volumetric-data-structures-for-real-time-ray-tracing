@@ -5,27 +5,32 @@ optimizing with k: 1000 and 5 iterations
 threshold: 0.47476315 variance: 7119346.5 mean: -7.578594 min: -939201.94 max: 7941.387
 to_keep: 66031 to_cluster: 57903
 k: 1000 max_iter: 5 n_samples: 57903 n_features: 512
+123934 => 67031: 0.0077
                                                                                      
 working on dragon_100_10_1
 optimizing with k: 100 and 10 iterations
 threshold: 0.47476315 variance: 7119346.5 mean: -7.578594 min: -939201.94 max: 7941.387
 to_keep: 66031 to_cluster: 57903
 k: 100 max_iter: 10 n_samples: 57903 n_features: 512                                                                                   
+123934 => 66131: 0.0092
 
 working on dragon_100_5_01
 optimizing with k: 100 and 5 iterations
 threshold: 7.598034 variance: 7119346.5 mean: -7.578594 min: -939201.94 max: 7941.387
 to_keep: 66031 to_cluster: 57903
-k: 100 max_iter: 5 n_samples: 57903 n_features: 512
-                                                                                   
+k: 100 max_iter: 5 n_samples: 57903 n_features: 512  
+123934 => 66131: 0.0096                    
+                                                            
 working on dragon_100_5_1
 optimizing with k: 100 and 5 iterations
 threshold: 0.47476315 variance: 7119346.5 mean: -7.578594 min: -939201.94 max: 7941.387
 to_keep: 66031 to_cluster: 57903
 k: 100 max_iter: 5 n_samples: 57903 n_features: 512
-                                                                                        
+123934 => 66131: 0.0093                       
+                                                                 
 working on dragon_100_5_99
 optimizing with k: 100 and 5 iterations
 threshold: -7.4567533 variance: 7119346.5 mean: -7.578594 min: -939201.94 max: 7941.387
 to_keep: 6990 to_cluster: 116944
 k: 100 max_iter: 5 n_samples: 116944 n_features: 512
+123934 => 66131: 0.0279

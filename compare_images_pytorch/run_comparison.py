@@ -38,6 +38,11 @@ to_compare = {
     "shockwave_clustering_100_10_01.png": "shockwave_clustering_raw.png",
     "shockwave_clustering_1000_5_01.png": "shockwave_clustering_raw.png",
 
+    "chimney_clustering_100_5_1.png": "chimney_clustering_raw.png",
+    "chimney_clustering_100_5_01.png": "chimney_clustering_raw.png",
+    "chimney_clustering_100_5_99.png": "chimney_clustering_raw.png",
+    "chimney_clustering_100_10_1.png": "chimney_clustering_raw.png",
+    "chimney_clustering_1000_5_1.png": "chimney_clustering_raw.png",
 }
 
 

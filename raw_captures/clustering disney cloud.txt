@@ -5,28 +5,32 @@ optimizing with k: 1000 and 5 iterations
 threshold: 0.35512456 variance: NaN mean: NaN min: NaN max: 0.033389688
 to_keep: 72456 to_cluster: 203274
 k: 1000 max_iter: 5 n_samples: 203274 n_features: 512
+275730 => 73456: 0.227
                                                                                     
 working on disney_cloud_100_10_1
 optimizing with k: 100 and 10 iterations
 threshold: 0.35512456 variance: NaN mean: NaN min: NaN max: 0.033389688
 to_keep: 72456 to_cluster: 203274
 k: 100 max_iter: 10 n_samples: 203274 n_features: 512
+275730 => 72556: 0.0299
                                                                                        
 working on disney_cloud_100_5_01
 optimizing with k: 100 and 5 iterations
 threshold: 0.78430396 variance: NaN mean: NaN min: NaN max: 0.033389688
 to_keep: 178563 to_cluster: 97167
 k: 100 max_iter: 5 n_samples: 97167 n_features: 512
+275730 => 178663: 0.0088
                                                                                      
 working on disney_cloud_100_5_1
 optimizing with k: 100 and 5 iterations
 threshold: 0.35512456 variance: NaN mean: NaN min: NaN max: 0.033389688
 to_keep: 72456 to_cluster: 203274
 k: 100 max_iter: 5 n_samples: 203274 n_features: 512
+275730 => 72556: 0.0283
                                                                                       
 working on disney_cloud_100_5_99
 optimizing with k: 100 and 5 iterations
 threshold: NaN variance: NaN mean: NaN min: NaN max: 0.033389688
 to_keep: 7 to_cluster: 275723
 k: 100 max_iter: 5 n_samples: 275723 n_features: 512
-                                                                                    
+275730 => 100: 0.0659

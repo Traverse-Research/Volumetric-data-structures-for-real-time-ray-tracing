@@ -151,33 +151,46 @@ One point of improvement to this technique could be a more optimized rejection s
         \includegraphics[width=0.45\textwidth]{figures/disney_cloud_clustering_01.png} \label{fig:block_compression_visualized:01}
         }
     \hfill
-    \subfloat[]{
+    \subfloat[The input parameters $k$, Iterations and Variance Threshold, with their respective compression results.]{
 
-        \begin{tabular}{|l|l|l|l|}
+    \begin{tabular}{|l|ccc|cccc|}
+        \toprule
         \hline
-        \textbf{Model} & \textbf{Data Format} & \textbf{RMSE} \\
+        Model & $k$ & Iterations & Variance Threshold & Before & After & Compression Ratio & RMSE \\
         \hline
-        bunny & f16 & 0.0048 \\
-        & Unorm & 0.0050 \\
-        & bc7 & 0.0050 \\
+        \midrule
+        shockwave & 1000 & 5 & 0.01 & 1877783 & 1621453 & 0.86349 & 0.0151 \\
+        & 100 & 10 & 0.01 & 1877783 & 1620553 & 0.86301 & 0.0151 \\
+        & 100 & 5 & 0.1 & 1877783 & 100 & 0.00005 & 0.0425 \\
+        & 100 & 5 & 0.01 & 1877783 & 1620553 & 0.86301 & \textbf{0.0046} \\
         \hline
-        Disney cloud & f16 & 0.0089 \\
-        & Unorm & 0.0089 \\
-        & bc7 & 0.0135 \\
+        \midrule
+        dragon & 1000 & 5 & 0.1 & 123934 & 67031 & 0.54086 & \textbf{0.0077} \\
+        & 100 & 10 & 0.1 & 123934 & 66131 & 0.53359 & 0.0092 \\
+        & 100 & 5 & 0.01 & 123934 & 66131 & 0.53359 & 0.0096 \\
+        & 100 & 5 & 0.1 & 123934 & 66131 & 0.53359 & 0.0093 \\
+        & 100 & 5 & 0.99 & 123934 & 66131 & 0.53359 & 0.0279 \\
         \hline
-        dragon & f16 & 0.0062 \\
-        & Unorm & 0.0062 \\
-        & bc7 & 0.0064 \\
+        \midrule
+        disney cloud & 1000 & 5 & 0.1 & 275730 & 73456 & 0.266405 & 0.227 \\
+        & 100 & 10 & 0.1 & 275730 & 72556 & 0.26314 & 0.0299 \\
+        & 100 & 5 & 0.01 & 275730 & 178663 & 0.64796 & \textbf{0.0088} \\
+        & 100 & 5 & 0.1 & 275730 & 72556 & 0.26314 & 0.0283 \\
+        & 100 & 5 & 0.99 & 275730 & 100 & 0.00036 & 0.0659 \\
         \hline
-        fire & f16 & 0.0044 \\
-        & Unorm & 0.0099 \\
-        & bc7 & 0.0100 \\
+        \midrule
+        chimney & 1000 & 5 & 0.1 & 915701 & 27820 & 0.03038 & 0.0109 \\
+        & 100 & 10 & 0.1 & 915701 & 26920 & 0.02939 & 0.0138 \\
+        & 100 & 5 & 0.01 & 915701 & 401147 & 0.43807 & \textbf{0.0046} \\
+        & 100 & 5 & 0.1 & 915701 & 26920 & 0.02939 & 0.0131 \\
+        & 100 & 5 & 0.99 & 915701 & 100 & 0.00010 & 0.0185 \\
         \hline
-    \end{tabular}
+        \bottomrule
+      \end{tabular}
     \label{tab:block_compression_visualized:table}
     }
 
-    \caption{} \label{fig:block_compression_visualized}
+    \caption{The results of clustering based compression. Four models were used for the comparison of the different clustering parameters. The tweakable clustering parameters are $k$, The number of iterations and the variance threshold. These are then used to cluster our brick data. The \textit{Before} and \textit{After} columns show the brick count. $Ratio$ is the ratio between brick number before and after clustering. And the RMSE is calculated using one of the frames for each model. All comparisons are done with BC7 compression enabled.} \label{fig:block_compression_visualized}
 \end{figure}
 
 \begin{figure}[H]
