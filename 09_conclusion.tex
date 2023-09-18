@@ -2,3 +2,14 @@
 
 
 \subsection{Future research} \label{conclusion:future_research}
+
+\begin{itemize}
+    \item One point of improvement to this technique could be a more optimized rejection scheme. Currently, we reject if the normalized variance of all brick values is too high. This only allows us to cluster homogeneous bricks, and not brick which contain a smooth gradient, even though there are bricks which are simply a gradient in one specific axis which likely could be clustered. Another major issue with this compression scheme is the build times. It currently takes multiple minutes to compress both the shockwave and the chimney animation, which makes development iteration times very slow.
+    \item Different texture compression schemes can be experimented with. Certain platforms, like mobile, have different texture compression formats namely, Ericsson Texture Compression (ETC) and Adaptive scalable compression (ASTC). ETC has 1 bit per voxel which is twice the compression ratio of the method described in \ref{approach:texture_compression}. And ASTC can compress between $0,15$ and $1,19$ depending on certain options. These compression schemes will change the quality of our data, but might be worth it on the supported platforms.
+    \item Different tree topologies can be experimented with. Most notably B+Tree's with uniform layer sizes. This might make it possible to deduplicate many of the bit masks and thus shrink the tree size. Another benefit as mentioned in \cite{hoetzlein2016gvdb}. By using a tree where all internal nodes are $8^3$ we get better ray tracing performance.
+    \item The ideas about running simulations inside of our VDB data structure as described in section \ref{approach:simulation} can be implemented. During this research there was a very limited time investment in making this feature work. So experimenting with the theorized technique could result in a nice piece of followup research.
+\end{itemize}
+
+
+
+

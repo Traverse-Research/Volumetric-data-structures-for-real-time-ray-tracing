@@ -130,9 +130,6 @@ This compression method offers very good compression rates with barely any quali
 Clustering similar bricks has proven more difficult than simply running k-means on all bricks. The main issue lies with figuring out which bricks contain high frequency data, and which contain low frequency data. The former should not be clustered as there is a very low chance that there will be any bricks which are similar, and thus, reduce the quality if we merge them. In figure \ref{fig:block_compression_visualized} we see what parameters contribute to a minimized loss of quality with the best compression ratio. As also can be seen in the previously mentioned figure, when bricks with high variance are also being clustered we quickly get blocky volumes, this is not acceptable in Breda. Only in sub-figure \ref{fig:block_compression_visualized:01} we no longer see blocky regions. A more low level view of our data can be seen in figure \ref{fig:implementation:compression:cluster}. Here we see that many similar clusters have been removed and our final voxel data texture contains fewer homogeneous grayscale bricks. 
 
 
-One point of improvement to this technique could be a more optimized rejection scheme. Currently, we reject if the normalized variance of all brick values is too high. This only allows us to cluster homogeneous bricks, and not brick which contain a smooth gradient, even though there are bricks which are simply a gradient in one specific axis which likely could be clustered. Another major issue with this compression scheme is the build times. It currently takes multiple minutes to compress both the shockwave and the chimney animation, which makes development iteration times very slow.
-
-
 \begin{figure}[H]
     \centering
     \subfloat[Disney cloud without cluster compression.]{
@@ -195,12 +192,40 @@ One point of improvement to this technique could be a more optimized rejection s
 
 \begin{figure}[H]
     \centering
-    \subfloat[]{
+    \subfloat[Texture voxel brick data before clustering.]{
         \includegraphics[width=0.45\textwidth]{figures/pre_clustered_memory.png} \label{fig:implementation:compression:pre_cluster}
     }
     \hfill
-    \subfloat[]{
+    \subfloat[Texture voxel brick data after clustering.]{
         \includegraphics[width=0.45\textwidth]{figures/post_clustered_memory.png} \label{fig:implementation:compression:post_cluster}
     }
     \caption{The results of our clustering compression technique. All of these results use Bc7 encoding. Figure \ref{fig:implementation:compression:pre_cluster} shows a slice out of the voxel brick data texture on the GPU. There are visible long chains of black or otherwise greyscale slices which means that these bricks are mostly homogeneous inside that brick. In Figure \ref{fig:implementation:compression:post_cluster} we again see a slice of the voxel brick data texture, but this time after running our clustering algorithm. There are visibly fewer patches grayscale bricks when compared to figure \ref{fig:implementation:compression:pre_cluster}. This shows us that we are actually removing bricks which are homogeneous, and keeping unique nodes.} \label{fig:implementation:compression:cluster}
+\end{figure}
+
+\subsection{Ray tracing} \label{results:ray_tracing}
+We compare our implementation against the results presented by \cite{NanoVDBBenchmark}. They use an NVIDIA RTX 8000 with 672GB/s bandwidth and 16.31 terra floating point operations (TFLOPS), and we use an NVIDIA RTX 3070 TI with 608GB/s and 21.75 TFLOPS. These numbers do not necessarily indicate performance, but do sketch a rough idea of the performance scale. The 
+
+\begin{figure}[H]
+    \subfloat[The level set rendering the depth of the primary hit calculated with HDDA.]{
+        \includegraphics[width=0.45\textwidth]{figures/dragon_levelset.png} \label{fig:tracing_performance:level_set}
+    }
+    \hfill
+    \vspace{0.5cm}
+    \subfloat[Fog volume rendering the accumulated density along the ray path.]{
+        \includegraphics[width=0.45\textwidth]{figures/bunny_fogvolume.png} \label{fig:tracing_performance:fog_volume}
+    }
+    \hfill
+    \subfloat[Performance numbers between NanoVDB from \cite{NanoVDBBenchmark} and our implementation. All numbers are in milliseconds.]{
+        \begin{tabularx}{\textwidth}{|c|X|X|X|X|}
+            \hline
+            \textbf{Method} & \textbf{Fog Volume Density Accumulation} & \textbf{Fog Volume SM Occupancy} & \textbf{Fog Volume L1} & \textbf{Level Set HDDA Primary Intersection} & \textbf{Level Set SM Occupancy}\\
+            \hline
+            NanoVDB & $4.971$ & $2.427$\\
+            \hline
+            Ours & $9.815$ & $1.092$ \\
+            \hline
+        \end{tabularx}
+        \label{tab:tracing_performance}
+    }
+    \caption{We attempted to benchmark using the same setup as \cite{NanoVDBBenchmark}. Unfortunately they did not provide a thorough explanation of the benchmark beyond the resolution and the models which were used, these are shown in \ref{fig:tracing_performance:fog_volume} and \ref{fig:tracing_performance:level_set}. We do not know how exactly the models were placed in the NanoVDB benchmark, so we positioned the objects to cover as much of the screen as possible to capture the lower bound of the ray tracing performance. }
 \end{figure}

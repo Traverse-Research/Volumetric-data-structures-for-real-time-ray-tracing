@@ -37,3 +37,5 @@ accessor
 bindless
 DBSCAN
 Unorm
+deduplicate
+TFLOPS
