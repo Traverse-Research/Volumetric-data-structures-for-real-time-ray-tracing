@@ -113,8 +113,12 @@ Table \ref{tab:compression_rmse} shows us that all models contain a non-zero RMS
 
 This compression method offers very good compression rates with barely any quality loss in most cases. Only when the model contains many values that are not properly representable, like in figure \ref{fig:block_compression:disney_unorm}, do we run into significant quality loss.
 
+\subsection{Clustering} \label{results:clustering}
+Clustering similar bricks has proven more difficult than simply running k-means on all bricks. The main issue lies in figuring out which bricks contain high-frequency data, and which contain low-frequency data. The former should not be clustered as there is a very low chance that there will be any similar bricks, and thus, reduce the quality if we merge them. In figure \ref{fig:block_compression_visualized} we see what parameters contribute to a minimized loss of quality with the best compression ratio. As also can be seen in the previously mentioned figure, when bricks with high variance are also being clustered we quickly get blocky volumes, this is not acceptable in Breda. Only in sub-figure \ref{fig:block_compression_visualized:01} we no longer see blocky regions. A more low-level view of our data can be seen in figure \ref{fig:implementation:compression:cluster}. Here we see that many similar clusters have been removed and our final voxel data texture contains fewer homogeneous grayscale bricks.  In general, this deduplication method works very well for larger models where many bricks have the potential to be similar. But when models are already small, say less than 50MB, there is almost nothing to be gained. 
 
-\clearpage
+\subsection{Ray tracing} \label{results:ray_tracing}
+We compare our implementation against the results presented by \cite{NanoVDBBenchmark}. They use an NVIDIA RTX 8000 with 672GB/s bandwidth and 16.31 terra floating point operations (TFLOPS), and we use an NVIDIA RTX 3070 TI with 608GB/s and 21.75 TFLOPS. These numbers do not necessarily indicate performance but do sketch a rough idea of the performance scale. 
+
 \begin{figure}[H]
     \centering
     \subfloat[Disney cloud RMSE between 32-bit float and Unorm formats. We only observe inherent path tracing noise.]{
@@ -169,8 +173,6 @@ This compression method offers very good compression rates with barely any quali
 
     \caption{The Root Mean Square Error (RMSE) of the compression of four different models at $1000$ samples per pixel, where high error values result in brighter pixels. Higher samples per pixel counts reduce the inherent path tracing noise which changes the RMSE offset seen in the comparison with f16 (this format is practically identical to f32). We calculate the difference against the full 32-bit floating point precision model as this is closest to the ground truth.} \label{fig:block_compression}
 \end{figure}
-\subsection{Clustering} \label{results:clustering}
-Clustering similar bricks has proven more difficult than simply running k-means on all bricks. The main issue lies in figuring out which bricks contain high-frequency data, and which contain low-frequency data. The former should not be clustered as there is a very low chance that there will be any similar bricks, and thus, reduce the quality if we merge them. In figure \ref{fig:block_compression_visualized} we see what parameters contribute to a minimized loss of quality with the best compression ratio. As also can be seen in the previously mentioned figure, when bricks with high variance are also being clustered we quickly get blocky volumes, this is not acceptable in Breda. Only in sub-figure \ref{fig:block_compression_visualized:01} we no longer see blocky regions. A more low-level view of our data can be seen in figure \ref{fig:implementation:compression:cluster}. Here we see that many similar clusters have been removed and our final voxel data texture contains fewer homogeneous grayscale bricks.  In general, this deduplication method works very well for larger models where many bricks have the potential to be similar. But when models are already small, say less than 50MB, there is almost nothing to be gained. 
 
 
 \begin{figure}[H]
@@ -242,11 +244,10 @@ Clustering similar bricks has proven more difficult than simply running k-means 
     \subfloat[Texture voxel brick data after clustering.]{
         \includegraphics[width=0.45\textwidth]{figures/post_clustered_memory.png} \label{fig:implementation:compression:post_cluster}
     }
-    \caption{The results of our clustering compression technique. All of these results use Bc7 encoding. Figure \ref{fig:implementation:compression:pre_cluster} shows a slice out of the voxel brick data texture on the GPU. There are visible long chains of black or otherwise greyscale slices which means that these bricks are mostly homogeneous inside that brick. In Figure \ref{fig:implementation:compression:post_cluster} we again see a slice of the voxel brick data texture, but this time after running our clustering algorithm. There are visibly fewer patches of grayscale bricks when compared to figure \ref{fig:implementation:compression:pre_cluster}. This shows us that we are removing homogeneous bricks, and keeping unique nodes.} \label{fig:implementation:compression:cluster}
+    \caption{The results of our clustering compression technique. All of these results use Bc7 encoding. Figure \ref{fig:implementation:compression:pre_cluster} shows a slice out of the voxel brick data texture on the GPU. There are visible long chains of black or otherwise greyscale slices which means that these bricks are mostly homogeneous inside that brick. In figure \ref{fig:implementation:compression:post_cluster} we again see a slice of the voxel brick data texture, but this time after running our clustering algorithm. There are visibly fewer patches of grayscale bricks when compared to figure \ref{fig:implementation:compression:pre_cluster}. This shows us that we are removing homogeneous bricks, and keeping unique nodes.} \label{fig:implementation:compression:cluster}
 \end{figure}
 
-\subsection{Ray tracing} \label{results:ray_tracing}
-We compare our implementation against the results presented by \cite{NanoVDBBenchmark}. They use an NVIDIA RTX 8000 with 672GB/s bandwidth and 16.31 terra floating point operations (TFLOPS), and we use an NVIDIA RTX 3070 TI with 608GB/s and 21.75 TFLOPS. These numbers do not necessarily indicate performance but do sketch a rough idea of the performance scale. The 
+
 
 \begin{figure}[H]
     \subfloat[Level set rendering the depth of the primary hit calculated with HDDA.]{
