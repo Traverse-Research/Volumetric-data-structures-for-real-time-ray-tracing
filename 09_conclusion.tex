@@ -14,19 +14,19 @@ Taking a look back at our research questions from section \ref{research_question
 
 \begin{figure}[H]
     \centering
-    \subfloat[Path traced half resolution Disney cloud path traced using multiple scattering.]{ 
+    \subfloat[Path traced half resolution Disney cloud path traced using multiple scattering.]{
         \includegraphics[width=0.9\textwidth]{figures/disney _cloud.png} \label{fig:renders:disney_cloud}
-        }
+    }
     \hfill
     \subfloat[Ray marched smoke inside the Bistro scene coming from a chimney.]{
         \includegraphics[width=0.45\textwidth]{figures/bistro_chimney_0.png} \label{fig:renders:bistro_0}
-        }
+    }
     \hfill
     \subfloat[The same scene later on the day shows a different frame in the animation sequence.]{
         \includegraphics[width=0.45\textwidth]{figures/bistro_chimney_1.png} \label{fig:renders:bistro_1}
-        }
+    }
 
     \hfill
-    
+
     \caption{Multiple renders made in Breda using the created data structures. Figure \ref{fig:renders:disney_cloud} shows the largest tested model which was rendered by using path tracing. This was not real-time (about 5 frames per second) because we use multiple scattering, which means that our ray can bounce many times into different directions within the cloud. Figures \ref{fig:renders:bistro_0} and \ref{fig:renders:bistro_1} show two frames from a video made in the Bistro scene. This was rendered using our ray marcher which does run in real-time together with all other systems in Breda. The way that the light dynamically scatters throughout the chimney smoke is an effect that is currently not done in any AAA game.} \label{fig:renders}
 \end{figure}

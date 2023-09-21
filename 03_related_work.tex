@@ -12,11 +12,11 @@ This section goes over all prior knowledge that is required to properly follow t
 
 
 \subsection{Rendering in games} \label{related_work:rendering}
-Computers have existed for some time now, and since the start, they have been used to render things on a screen. Whether this is text, graphs, photos, or virtual worlds. When rendering virtual worlds, for example, games or movies, optimized algorithms have to be used to keep up with the growing complexity and increasing fidelity that is expected of new titles. One of these algorithms that has been used in practically all games is rasterization, which quickly projects triangles onto the screen. A newer algorithm, with different benefits and drawbacks, is ray tracing, which tries to emulate the physical properties of light as it exists in the real world. Usually, we render scenes that consist of a set of models, for example for every tree, rock or character in the world. These models are made up of triangles which store details such as material, normal and position.
+Computers have existed for some time now, and since the start, they have been used to render things on a screen. Whether this is text, graphs, photos, or virtual worlds. When rendering virtual worlds, for example, games or movies, optimized algorithms have to be used to keep up with the growing complexity and increasing fidelity that is expected of new titles. One of these algorithms that has been used in practically all games is rasterization, which quickly projects triangles onto the screen. A different algorithm, with different benefits and drawbacks, is ray tracing, which tries to emulate the physical properties of light as it exists in the real world. Usually, we render scenes that consist of a set of models, for example for every tree, rock or character in the world. These models are made up of triangles which store details such as material, normal and position.
 
 
 \subsubsection{Rasterization} \label{related_work:rendering:rasterization}
-Screen space rendering techniques using the graphics processing unit's (GPU) hardware rasterizer are frequently referred to as rasterization. This technique has been the industry standard for at least the past 20 years. It is a pipeline of operations that calculates which triangles are visible (see figure \ref{fig:rasterization_pipeline}). Because graphics hardware has been optimized for this specific pipeline, it is fast and thus, if possible, the rasterization pipeline can and should be exploited where possible. However, there are issues. For example, reflections can not show off-screen objects without sophisticated (and often slow) tricks. This is an inherent issue with the rasterization because the fragment shader stage does not know anything about off-screen and obscured triangles. Along with that, the performance scales linearly with the number of triangles. So when increasing the number of triangles to absurd amounts, there will arise performance issues.
+Screen space rendering techniques using the graphics processing unit's (GPU) hardware rasterizer are frequently referred to as rasterization. This technique has been the industry standard for at least the past 20 years. It is a pipeline of operations that calculates which triangles are visible (see figure \ref{fig:rasterization_pipeline}). Because graphics hardware has been optimized for this specific pipeline, it is fast and thus, if possible, the rasterization pipeline can and should be exploited where possible. However, there are issues. For example, reflections can not show off-screen objects without sophisticated (and often slow) tricks. This is an inherent issue with the rasterization because the fragment shader stage does not know anything about off-screen and obscured triangles. Along with that, rasterization performance scales linearly with the number of triangles. Therefore, it quickly becomes impractical to use for scenes/assets with incredibly high triangle counts, as required by modern render pipelines.
 
 \subsubsection{Ray and path tracing} \label{related_work:rendering:ray_tracing}
 Ray tracing is an entirely different technique that allows us to create arbitrary rays and find what primitives they intersect. Which has the benefit of no longer being bound to a certain view matrix, like with rasterization. This immediately opens up the door for techniques that were traditionally not possible. For example, off-screen reflections can now be rendered by shooting new rays from the reflection point (see figure \ref{fig:path_ray_raster}). We also don't have to process every triangle individually, instead, we can shoot rays for every pixel in the screen, and find the intersecting triangles quickly.
@@ -92,7 +92,7 @@ A follow-up paper was released further improving the memory footprint optimizati
     \centering
     \subfloat[Removal of identical nodes in all levels of a binary tree. In the SVDAG paper, the same technique is applied to octrees. \cite{kampe2013high}]{
         \includegraphics[width=0.45\textwidth]{figures/DAG_node_deduplication.png} \label{fig:DAG_node_deduplication}
-        }
+    }
     \hfill
     \subfloat[Here we see the brick map (in red), which is dense. Whenever an area in this brick map is not homogeneous (indicated by the filled-in squares), we point to a brick (in blue). \cite{van2015real}]{
         \includegraphics[width=0.45\textwidth]{figures/brickmap.png} \label{fig:brickmap}
@@ -143,21 +143,21 @@ When taking steps along a ray, there is a high chance that we will often access 
 \begin{table}[htbp]
     \centering
     \begin{adjustbox}{max width=\textwidth}
-    \begin{tabularx}{\textwidth}{|c|X|X|X|X|X|}
-    \hline
-    \textbf{Method} & \textbf{Sampling Performance} & \textbf{DDA Performance} & \textbf{Memory Footprint} & \textbf{Update Speed} & \textbf{Simplicity} \\
-    \hline
-    Dense Grid & \Plus \Plus & \Minus \Minus  & \Minus \Minus & \Plus \Plus & \Plus \Plus \\
-    \hline
-    ESVO & \Minus \Minus & \Plus & \Plus & \Minus \Minus & \Minus \\
-    \hline
-    SVDAG & \Minus \Minus & \Plus & \Plus \Plus & \Minus \Minus & \Minus \Minus \\
-    \hline
-    Brick map & \Plus & \Plus \Plus & \Minus & \Plus & \Plus \\
-    \hline
-    VDB & \Plus & \Plus \Plus & \Plus & \Minus & \Minus \\
-    \hline
-    \end{tabularx}
+        \begin{tabularx}{\textwidth}{|c|X|X|X|X|X|}
+            \hline
+            \textbf{Method} & \textbf{Sampling Performance} & \textbf{DDA Performance} & \textbf{Memory Footprint} & \textbf{Update Speed} & \textbf{Simplicity} \\
+            \hline
+            Dense Grid      & \Plus \Plus                   & \Minus \Minus            & \Minus \Minus             & \Plus \Plus           & \Plus \Plus         \\
+            \hline
+            ESVO            & \Minus \Minus                 & \Plus                    & \Plus                     & \Minus \Minus         & \Minus              \\
+            \hline
+            SVDAG           & \Minus \Minus                 & \Plus                    & \Plus \Plus               & \Minus \Minus         & \Minus \Minus       \\
+            \hline
+            Brick map       & \Plus                         & \Plus \Plus              & \Minus                    & \Plus                 & \Plus               \\
+            \hline
+            VDB             & \Plus                         & \Plus \Plus              & \Plus                     & \Minus                & \Minus              \\
+            \hline
+        \end{tabularx}
     \end{adjustbox}
     \caption{An overview of the different data structures. The pluses and minuses provide some intuition into what every structure is optimized for. A very broad summary of the different metrics: The shallower the tree, the faster our sampling. Deeper trees have better DDA performance (see section \ref{related_work:attribute_separation:fast_volume_traversal} for a very brief description), but we get optimal performance when our nodes approximate the size of our caches and cache lines. Deeper trees improve memory footprint and deduplication improves it even further. The shallower our tree, the faster and easier our updates. And simplicity depends on the method.}
     \label{tab:structure-comparison}
