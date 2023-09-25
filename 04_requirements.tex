@@ -1,11 +1,11 @@
 \section{Requirements} \label{requirements}
-This research focuses on a specific set of requirements having to do with volume data structures. We want to support volumetric animations in the Breda renderer developed by Traverse Research (as explained in section \ref{introduction:traverse_research}). This means that we want to support path tracing volumetric effects, with optional emission using assets that are proportional to standard game asset sizes. Below are the most important requirements our data structure should adhere to.
+This research focuses on a specific set of requirements having to do with volume data structures. We want to support volumetric animations in the Breda renderer developed by Traverse Research (as explained in Section \ref{introduction:traverse_research}). This means that we want to support path tracing volumetric effects, with optional emission using assets that are proportional to standard game asset sizes. Below are the most important requirements our data structure should adhere to.
 \subsection{Asset size} \label{requirements:asset_size}
 Asset sizes in games have been growing for a while, with the latest titles shipping 4k textures. To keep our assets in line with standard game assets we should not be going above 100MB per volume animation. This requires both the volume geometry and attributes to be significantly compressed.
 \subsection{Sampling speed} \label{requirements:sampling_speed}
-Our 'random' access times should be fast enough to enable path-traced volumetrics on high-end current-generation hardware. In reality, 'random' access is never random \cite{museth2013vdb}, so optimizing cache utilization to improve spatially coherent access' will go a long way.
+Our sampling access times should be fast enough to enable path-traced volumetrics on high-end current-generation hardware. This means that our algorithm should be optimized for a typical path tracing access pattern.
 \subsection{Animation playback} \label{requirements:animation_playback}
-Fast animation playback is the most novel part of this research. And if we are running high framerate animations these should not take up too much time of our frame budget. So complex expansive delta update schemes are not an option for us.
+Animation playback is a mandatory feature for our renderer. And if we are running high frame rate animations these should not take up too much time of our frame budget. So complex expansive delta update schemes are not an option for us.
 \subsection{Lossy compression} \label{requirements:lossy_compression}
 Pretty much all effective compression schemes for floating point data are lossy in some form. The difficult task is making this lossiness as hard as possible to notice. So when we compress our volume data it is essential that we keep its high and low frequency features intact.
 \subsection{Level of detail} \label{requirements:level_of_detail}

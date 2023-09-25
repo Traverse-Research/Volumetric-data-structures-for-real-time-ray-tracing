@@ -3,11 +3,11 @@ This thesis aims to be an introduction to volume rendering data structures as we
 
 
 \subsection{Traverse Research} \label{introduction:traverse_research}
-\href{https://traverseresearch.nl/}{Traverse Research} is a company that does state-of-the-art research in graphics, and more specifically ray tracing. Traverse does research for multiple hardware vendors including AMD and ARM, for whom they develop ray tracing algorithms, optimizations, and workloads.
+\href{https://traverseresearch.nl/}{Traverse Research} is a company that specialized in state-of-the-art research in graphics, and more specifically ray tracing. Traverse does research for multiple hardware vendors including AMD and ARM, for whom they develop ray tracing algorithms, optimizations, and workloads.
 \subsubsection{Breda} \label{introduction:traverse_research:breda}
 Traverse's current in-house hybrid rendering framework "Breda" includes many features that are expected from a modern renderer. However, volume rendering is still largely unexplored. Breda can compile for either a Vulkan or DirectX 12 backend to make use of the latest ray tracing features. Along with that, some advanced rendering techniques are used. Most notably bindless rendering\cite{BindlessRenderingSetup} and render graphs\cite{RenderGraph101}. The former is a different way of interfacing with data on the GPU, while the latter simplifies GPU synchronization while optimizing dispatch ordering based on read and write dependencies of different pieces of data on the GPU. All of this is written in Rust and HLSL.
 \subsubsection{Volumes} \label{introduction:traverse_research:volumes}
-In parallel to this research there is another project going on that focuses on shading as explained in Section \ref{related_work:path_traced_volume_rendering}. The combination of both projects allows for physically based shading of large animated volumetric effects in real-time. The exact placement of this research inside the Breda framework can be seen in figure \ref{fig:project_structure}.
+In parallel to this research there is another project going on that focuses on shading as explained in Section \ref{related_work:path_traced_volume_rendering}. The combination of both projects allows for physically based shading of large animated volumetric effects in real-time. The exact placement of this research inside the Breda framework can be seen in Figure \ref{fig:project_structure}.
 
 \begin{figure}[H]
     \centering
