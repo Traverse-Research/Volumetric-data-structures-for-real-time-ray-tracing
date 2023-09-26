@@ -122,27 +122,27 @@ We compare our implementation against the results presented by \cite{NanoVDBBenc
 \begin{figure}[H]
     \centering
     \subfloat[Disney Cloud RMSE between 32-bit float and Unorm formats. We only observe inherent path tracing noise.]{
-        \includegraphics[width=0.45\textwidth]{compare_images_pytorch/diff_disney_cloud_format_unorm.png} \label{fig:block_compression:disney_unorm}
+        \includegraphics[width=0.3\textwidth]{compare_images_pytorch/diff_disney_cloud_format_unorm.png} \label{fig:block_compression:disney_unorm}
     }
-    \hfill
-    \subfloat[Disney Cloud RMSE between 32-bit float and BC7 formats. We observe noise at specific voxels.]{
-        \includegraphics[width=0.45\textwidth]{compare_images_pytorch/diff_disney_cloud_format_bc7.png} \label{fig:block_compression:disney_bc7}
+    \hspace{0.2cm}
+    \subfloat[Disney Cloud RMSE between 32-bit float and BC7 formats. There is an increase in noise across almost the entire volume, but not in large regions like in Figure \ref{fig:block_compression:fire_unorm}. This tells us that certain voxels in a brick can be wrong, but most of the voxels in each brick are still correct.]{
+        \includegraphics[width=0.3\textwidth]{compare_images_pytorch/diff_disney_cloud_format_bc7.png} \label{fig:block_compression:disney_bc7}
+    }
+    \hspace{0.2cm}
+    \subfloat[Bunny cloud RMSE between 32-bit float and BC7 formats. We only observe inherent path tracing noise.]{
+        \includegraphics[width=0.3\textwidth]{compare_images_pytorch/diff_bunny_format_bc7.png} \label{fig:block_compression:bunny_bc7}
     }
     \hfill
     \subfloat[Fire RMSE between 32-bit float and f16. We only observe inherent path tracing noise.]{
-        \includegraphics[width=0.45\textwidth]{compare_images_pytorch/diff_fire_format_f16.png} \label{fig:block_compression:fire_f16}
+        \includegraphics[width=0.3\textwidth]{compare_images_pytorch/diff_fire_format_f16.png} \label{fig:block_compression:fire_f16}
     }
-    \hfill
+    \hspace{0.2cm}
     \subfloat[Fire RMSE between 32-bit float and Unorm formats. We observe noise in the low-density regions at the top of the flame]{
-        \includegraphics[width=0.45\textwidth]{compare_images_pytorch/diff_fire_format_unorm.png} \label{fig:block_compression:fire_unorm}
+        \includegraphics[width=0.3\textwidth]{compare_images_pytorch/diff_fire_format_unorm.png} \label{fig:block_compression:fire_unorm}
     }
-    \hfill
-    \subfloat[Bunny cloud RMSE between 32-bit float and BC7 formats. We only observe inherent path tracing noise.]{
-        \includegraphics[width=0.45\textwidth]{compare_images_pytorch/diff_bunny_format_bc7.png} \label{fig:block_compression:bunny_bc7}
-    }
-    \hfill
+    \hspace{0.2cm}
     \subfloat[Dragon RMSE between 32-bit float and BC7 formats. We only observe inherent path tracing noise.]{
-        \includegraphics[width=0.45\textwidth]{compare_images_pytorch/diff_dragon_format_bc7.png} \label{fig:block_compression:dragon_bc7}
+        \includegraphics[width=0.3\textwidth]{compare_images_pytorch/diff_dragon_format_bc7.png} \label{fig:block_compression:dragon_bc7}
     }
     \hfill
     \subfloat[Table with the RMSE between 32-bit floating point  per voxel, and other data formats.]{
@@ -171,7 +171,7 @@ We compare our implementation against the results presented by \cite{NanoVDBBenc
         \label{tab:compression_rmse}
     }
 
-    \caption{The Root Mean Square Error (RMSE) of the compression of four different models at $1000$ samples per pixel with 32-bit floats per voxel used as a baseline, where high error values result in brighter pixels. Higher samples per pixel counts reduce the inherent path tracing noise which changes the RMSE offset seen in the comparison with f16 (this format is practically identical to f32), however, converging properly with tens of thousands of samples was impractical. We calculate the difference against the full 32-bit floating point precision model as this is closest to the ground truth.} \label{fig:block_compression}
+    \caption{The Root Mean Square Error (RMSE) of the compression of four different models at $1000$ samples per pixel with 32-bit floats per voxel used as a baseline. Red pixels have a low error and higher hue values (more green/blue) indicate a larger error. Higher samples per pixel counts reduce the inherent path tracing noise which changes the RMSE offset seen in the comparison with f16 (this format is practically identical to f32), however, converging properly with tens of thousands of samples was impractical. We calculate the difference against the full 32-bit floating point precision model as this is closest to the ground truth.} \label{fig:block_compression}
 \end{figure}
 
 
