@@ -3,7 +3,7 @@ In this section, we will first describe the different models that are used for c
 
 
 \subsection{Models} \label{results:models}
-Multiple models were used to evaluate the implemented methods in Section \ref{implementation}. The model with the largest scale is the Disney cloud \cite{DisneyCloud}. Our implementation is bound by volumes with size $4096^3$ so we use the half-resolution version. We also use multiple models from the \href{https://www.openvdb.org/download/}{OpenVDB website} and the \href{https://jangafx.com/software/embergen/download/free-vdb-animations/}{JangaFX website}. A mix of models was used with diverse axis sizes, number of voxels, animation frame numbers and shapes. Most models are static and thus consist of only a single animation frame, but to get a rough idea of the scaling of our structure size with the number of animation frames, we specifically used models with 10, 50 and 100 frames as well.
+Multiple models were used to evaluate the implemented methods in Section \ref{implementation}. The model with the largest scale is the Disney Cloud \cite{DisneyCloud}. Our implementation is bound by volumes with size $4096^3$ so we use the half-resolution version. We also use multiple models from the \href{https://www.openvdb.org/download/}{OpenVDB website} and the \href{https://jangafx.com/software/embergen/download/free-vdb-animations/}{JangaFX website}. A mix of models was used with diverse axis sizes, number of voxels, animation frame numbers and shapes. Most models are static and thus consist of only a single animation frame, but to get a rough idea of the scaling of our structure size with the number of animation frames, we specifically used models with 10, 50 and 100 frames as well.
 
 \begin{figure}[H]
     \centering
@@ -31,7 +31,7 @@ Multiple models were used to evaluate the implemented methods in Section \ref{im
         \includegraphics[width=0.3\textwidth]{figures/cloud pack.png}
     }
     \hfill
-    \subfloat[Disney cloud]{
+    \subfloat[Disney Cloud]{
         \includegraphics[width=0.3\textwidth]{figures/disney cloud.png}
     }
     \hfill
@@ -61,7 +61,7 @@ Multiple models were used to evaluate the implemented methods in Section \ref{im
             \hline
             Cloud pack     & 49,869,596      & [349, 178, 530]       & 10                        \\
             \hline
-            Disney cloud   & 188,358,293     & [993, 675, 1,224]     & 1                         \\
+            Disney Cloud   & 188,358,293     & [993, 675, 1,224]     & 1                         \\
             \hline
             Chimney        & 239,747,485     & [160, 350, 505]       & 100                       \\
             \hline
@@ -95,7 +95,7 @@ As described in Section \ref{approach:flipbook_animations}, we put our focus on 
         \hline
         Cloud pack     & 10                & 41KB             & 327,680           & 168MB            & 905,216           & 61MB             \\
         \hline
-        Disney cloud   & 1                 & 4KB              & 32,768            & 17MB             & 1,007,616         & 69MB             \\
+        Disney Cloud   & 1                 & 4KB              & 32,768            & 17MB             & 1,007,616         & 69MB             \\
         \hline
         Chimney        & 100               & 410KB            & 3,276,800         & 1,678MB          & 9,195,520         & 625MB            \\
         \hline
@@ -121,11 +121,11 @@ We compare our implementation against the results presented by \cite{NanoVDBBenc
 
 \begin{figure}[H]
     \centering
-    \subfloat[Disney cloud RMSE between 32-bit float and Unorm formats. We only observe inherent path tracing noise.]{
+    \subfloat[Disney Cloud RMSE between 32-bit float and Unorm formats. We only observe inherent path tracing noise.]{
         \includegraphics[width=0.45\textwidth]{compare_images_pytorch/diff_disney_cloud_format_unorm.png} \label{fig:block_compression:disney_unorm}
     }
     \hfill
-    \subfloat[Disney cloud RMSE between 32-bit float and BC7 formats. We observe noise at specific voxels.]{
+    \subfloat[Disney Cloud RMSE between 32-bit float and BC7 formats. We observe noise at specific voxels.]{
         \includegraphics[width=0.45\textwidth]{compare_images_pytorch/diff_disney_cloud_format_bc7.png} \label{fig:block_compression:disney_bc7}
     }
     \hfill
@@ -155,7 +155,7 @@ We compare our implementation against the results presented by \cite{NanoVDBBenc
                            & Unorm                & 0.0050        \\
                            & bc7                  & 0.0050        \\
             \hline
-            Disney cloud   & f16                  & 0.0089        \\
+            Disney Cloud   & f16                  & 0.0089        \\
                            & Unorm                & 0.0089        \\
                            & bc7                  & 0.0135        \\
             \hline
@@ -177,19 +177,19 @@ We compare our implementation against the results presented by \cite{NanoVDBBenc
 
 \begin{figure}[H]
     \centering
-    \subfloat[Disney cloud without cluster compression.]{
+    \subfloat[Disney Cloud without cluster compression.]{
         \includegraphics[width=0.45\textwidth]{figures/disney_cloud_clustering_raw.png} \label{fig:block_compression_visualized:raw}
     }
     \hfill
-    \subfloat[Disney cloud with all bricks being clustered.]{
+    \subfloat[Disney Cloud with all bricks being clustered.]{
         \includegraphics[width=0.45\textwidth]{figures/disney_cloud_clustering_99.png} \label{fig:block_compression_visualized:99}
     }
     \hfill
-    \subfloat[Disney cloud with a variance reduction of $0.1$, clustering roughly $70\%$ of the bricks into 100 new bricks.]{
+    \subfloat[Disney Cloud with a variance reduction of $0.1$, clustering roughly $70\%$ of the bricks into 100 new bricks.]{
         \includegraphics[width=0.45\textwidth]{figures/disney_cloud_clustering_1.png} \label{fig:block_compression_visualized:1}
     }
     \hfill
-    \subfloat[Disney cloud with a variance reduction of $0.01$, clustering roughly $35\%$ of the bricks into 100 new bricks.]{
+    \subfloat[Disney Cloud with a variance reduction of $0.01$, clustering roughly $35\%$ of the bricks into 100 new bricks.]{
         \includegraphics[width=0.45\textwidth]{figures/disney_cloud_clustering_01.png} \label{fig:block_compression_visualized:01}
     }
     \hfill
@@ -271,5 +271,6 @@ We compare our implementation against the results presented by \cite{NanoVDBBenc
         \end{tabularx}
         \label{tab:tracing_performance:numbers}
     }
-    \caption{We attempted to benchmark using the same setup as \cite{NanoVDBBenchmark}. Unfortunately, they did not provide a thorough explanation of the benchmark beyond the resolution and the models which were used, these are shown in \ref{fig:tracing_performance:fog_volume} and \ref{fig:tracing_performance:level_set}. We do not know how exactly the models were placed in the NanoVDB benchmark, so we positioned the objects to cover as much of the screen as possible to capture the lower bound of the ray tracing performance. In Table \ref{tab:tracing_performance:numbers} we show the fog volume and level set render timings in ms. We also show the streaming multiprocessor (SM) occupancy and the L1 pressure. These two metrics provide insight into bottlenecks and potential future optimization targets.}
+    \caption{We attempted to benchmark using the same setup as \cite{NanoVDBBenchmark}. Unfortunately, they did not provide a thorough explanation of the benchmark beyond the resolution and the models which were used, these are shown in \ref{fig:tracing_performance:fog_volume} and \ref{fig:tracing_performance:level_set}. We do not know how exactly the models were placed in the NanoVDB benchmark, so we positioned the objects to cover as much of the screen as possible to capture the lower bound of the ray tracing performance. In Table \ref{tab:tracing_performance:numbers} we show the fog volume and level set render timings in ms. We also show the streaming multiprocessor (SM) occupancy and the L1 pressure. These two metrics provide insight into bottlenecks and potential future optimization targets. Unfortunately these detailed performance metrics were not provided with the NanoVDB results, thus these fields are highlighted with questionmarks.}
+    \label{tab:tracing_performance}
 \end{figure}
