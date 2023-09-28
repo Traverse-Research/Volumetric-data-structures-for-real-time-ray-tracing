@@ -23,7 +23,7 @@ Using these options we can compute our VDB asset (The entire pipeline can be see
 \begin{enumerate}
     \itemsep0em
     \item First we read the metadata of our VDB files, which we then use to select which grid we want to read.
-    \item Now we load the VDB data using vdb-rs \cite{VDBRS} which was developed during this research.
+    \item Now we load the VDB data using vdb-rs \cite{VDBRS} which was as part of this research.
     \item Then we transform this data into our flat GPU-friendly data.
     \item The first pre-processing step consists of our deduplication scheme described in Section \ref{approach:clustering_similar_nodes}.
     \item After this we transform our data layout from our easy (and locally coherent) buffer layout to the texture layout.
@@ -40,7 +40,7 @@ Using these options we can compute our VDB asset (The entire pipeline can be see
 
 
 \subsection{Shaders} \label{implementation:shaders}
-To integrate the built data structure into Breda, two shaders have been written, \textit{VDB.hsls} and \textit{HDDA.hlsl}. The main way to interface with the data structure is contained in \textit{VDB.hlsl} which has functionality for getting voxels, getting the activity status of certain voxels, and checking what the deepest level of the tree a certain voxel is part of. \textit{HDDA.hlsl} is largely the same as implemented by \cite{museth2013vdb}. The main difference is that we make use of callbacks on the GPU, which is done by passing a template argument to the traversal function. This template argument must implement \textit{empty} and \textit{operator()} which are called after every step, or compiled away if either of them is not used. These step functions are used to write clean yet fast traversal code (as seen in Figure \ref{implementation:hdda_sample}).
+To integrate the built data structure into Breda, two shaders have been written, \textit{VDB.hlsl} and \textit{HDDA.hlsl}. The main way to interface with the data structure is contained in \textit{VDB.hlsl} which has functionality for getting voxels, getting the activity status of certain voxels, and finding the deepest existing child node so we can efficiently step to the correct node boundary (recall that the different node layers have different sizes). \textit{HDDA.hlsl} is largely the same as implemented by \cite{museth2013vdb} but without the activity mask. The main difference is that we make use of callbacks on the GPU, which is done by passing a template argument to the traversal function. This template argument must implement \textit{empty} and \textit{operator()} which are called after every step, or compiled away if either of them is not used. These step functions are used to write clean yet fast traversal code (as seen in Figure \ref{implementation:hdda_sample}).
 
 
 \begin{figure}

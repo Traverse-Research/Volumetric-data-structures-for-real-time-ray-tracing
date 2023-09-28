@@ -3,6 +3,7 @@ import torch
 import torch.nn as nn
 import torchvision.transforms.functional as functional
 import math
+import nvidia_flip
 
 def rgb_to_hsv(image: torch.Tensor) -> torch.Tensor:
     r, g, _ = image.unbind(dim=-3)
@@ -131,22 +132,21 @@ for comp, base in to_compare.items():
     width = shape[0]
     height = shape[1]
     shape = (width, height)
-    print(shape)
 
     to_write_im = rgb_to_hsv(to_write_im)
     to_write_im = torch.stack((to_write_im[2], torch.ones(shape), torch.ones( shape)),  dim=-3)
-    print(to_write_im.shape)
-    print(torch.max(to_write_im))
-    print(torch.min(to_write_im))
     to_write_im = hsv_to_rgb(to_write_im)
 
     #to_write_im = torch.lerp(to_write_im, end, 1)
     torchvision.io.write_png(functional.convert_image_dtype(to_write_im, torch.uint8), "diff_" + comp)
 
 
-    criterion = nn.MSELoss()
-    loss = torch.sqrt(criterion(comp_im, base_im))
+    flip_loss = nvidia_flip.HDRFLIPLoss()
+    flip_loss = torch.sqrt(flip_loss(comp_im[None, :], base_im[None, :]))
+
+    mse_loss = nn.MSELoss()
+    mse_loss = torch.sqrt(mse_loss(comp_im, base_im))
 
 
 
-    print('{:<36} {:<36} {:<12}'.format(base, comp, loss))
+    print('{:<36} {:<36} {:<12} {:<12}'.format(base, comp, flip_loss, mse_loss))
