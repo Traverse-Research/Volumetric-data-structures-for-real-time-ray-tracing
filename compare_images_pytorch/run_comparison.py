@@ -149,4 +149,4 @@ for comp, base in to_compare.items():
 
 
 
-    print('{:<36} {:<36} {:<12} {:<12}'.format(base, comp, flip_loss, mse_loss))
+    print('{:<36} {:<36} {:<36} {:<36} {:<36} '.format(base, comp, flip_loss, mse_loss, flip_loss/mse_loss))
