@@ -1,2 +1,4 @@
 build/
+!build/main.pdf
 .DS_Store
+*pycache*
