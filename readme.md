@@ -1,3 +1,5 @@
+[![Banner](banner.png)](https://traverseresearch.nl)
+
 This repository contains all documents related to my thesis on volumetric data structures. build/ contains my thesis in pdf format.
 
 Presentations regarding this subject:
