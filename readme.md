@@ -13,5 +13,10 @@ Presentations regarding this subject:
 - [VDB explanation](https://docs.google.com/presentation/d/11vAhotcEECWvUXbR-TMMT9-y0jhT7pUyaHFOFtiqWLk/edit?usp=sharing)
 
 # Results
+Half resolution [Disney Cloud](https://disneyanimation.com/resources/clouds/)
+
 ![city](figures/city.png)
-https://github.com/Traverse-Research/Volumetric-data-structures-for-real-time-ray-tracing/assets/31817802/90c4fdd3-bc6a-4c7d-a8b5-683fa2c09b80
+
+Animated [chimney](https://jangafx.com/software/embergen/download/free-vdb-animations/) in Bistro scene (click for youtube video)
+
+[![Chimney video](https://img.youtube.com/vi/uZ53LaWfU9c/maxresdefault.jpg)](https://www.youtube.com/watch?v=uZ53LaWfU9c)
