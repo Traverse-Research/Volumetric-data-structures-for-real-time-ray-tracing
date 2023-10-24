@@ -14,4 +14,4 @@ Presentations regarding this subject:
 
 # Results
 ![city](figures/city.png)
-Uploading chimney video.mp4…
+https://github.com/Traverse-Research/Volumetric-data-structures-for-real-time-ray-tracing/assets/31817802/90c4fdd3-bc6a-4c7d-a8b5-683fa2c09b80
