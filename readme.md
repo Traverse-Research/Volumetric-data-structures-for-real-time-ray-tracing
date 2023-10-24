@@ -3,7 +3,7 @@
 
 [![Banner](banner.png)](https://traverseresearch.nl)
 
-This repository contains all documents related to the master thesis by Rosalie de Winther on volumetric data structures.
+This repository contains all documents related to the master thesis by Rosalie de Winther on volumetric data structures. [The main document can be found here.](https://github.com/Traverse-Research/Volumetric-data-structures-for-real-time-ray-tracing/blob/main/build/main.pdf)
 
 # Presentations
 
@@ -14,4 +14,4 @@ Presentations regarding this subject:
 
 # Results
 ![city](figures/city.png)
-<video src='https://github.com/Traverse-Research/Volumetric-data-structures-for-real-time-ray-tracing/assets/31817802/d8738502-1554-4ef0-8a27-2b5fd77e5be2'/>
+Uploading chimney video.mp4…
